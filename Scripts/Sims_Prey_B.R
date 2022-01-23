@@ -72,7 +72,7 @@ for(G in 1:GENS){
       PREY_mods <- list()
       for(i in 1:n_prey){
         # Prey movement parameters
-        prey_tau_p <- prey.tau_p(mass_prey)
+        prey_tau_p <- prey.tau_p(mass_prey, variance = TRUE)
         prey_tau_v <- prey.tau_v(mass_prey, variance = TRUE)
         prey_sig <- prey.SIG(mass_prey)
         prey_lv <- sqrt((prey_tau_v/prey_tau_p)*prey_sig)
@@ -90,8 +90,9 @@ for(G in 1:GENS){
       PREY_mods <- list()
       for(i in 1:n_prey){
         # Prey movement parameters
-        prey_tau_p <- sample(PREY_tau_p, 1)
-        prey_tau_v <- sample(PREY_tau_v, 1) + rnorm(1, 0, 2) 
+        prey_tau_p <- sample(PREY_tau_p, 1) + rnorm(1, 0, 10) #Add some 'mutation' based variance
+        prey_tau_p <- ctmm:::clamp(prey_tau_p, min = 0, max = Inf) #Clamp the minimum to 0
+        prey_tau_v <- sample(PREY_tau_v, 1) + rnorm(1, 0, 2)  #Add some 'mutation' based variance
         prey_tau_v <- ctmm:::clamp(prey_tau_v, min = 0, max = Inf) #Clamp the minimum to 0
         prey_sig <- sample(PREY_sig, 1)
         prey_lv <- sqrt((prey_tau_v/prey_tau_p)*prey_sig)
@@ -271,6 +272,16 @@ abline(lm(tau_v ~ generation,
           data = prey_details), lty = 'dashed')
 
 
+plot(tau_p ~ generation,
+     data = prey_details,
+     #type = "l",
+     col = "red",
+     #ylim = c(0,7),
+     xlab = "Generation",
+     ylab = "Range crossing time (sec)")
+abline(lm(tau_p ~ generation,
+          data = prey_details), lty = 'dashed')
+
 plot(speed ~ generation,
      data = prey_details,
      #type = "l",
@@ -280,3 +291,5 @@ plot(speed ~ generation,
      ylab = "Movement speed (m/s)")
 abline(lm(speed ~ generation,
           data = prey_details), lty = 'dashed')
+
+
