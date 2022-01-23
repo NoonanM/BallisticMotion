@@ -11,6 +11,7 @@
 # Package import
 
 library(ctmm)
+library(raster)
 
 #----------------------------------------------------------------------
 # Calculate the euclidean distance between two points
@@ -199,7 +200,7 @@ grazing <- function(track, habitat, metric = "patches") {
 # Determine "Lifespan" and sampling interval based on mass_prey (g)
 #----------------------------------------------------------------------
 
-sampling <- function(mass, crossings = 50) {
+sampling <- function(mass, crossings = 20) {
   
   # total lifespan (based on number of range crossings)
   lifespan <- round(prey.tau_p(mass)*crossings)
@@ -221,7 +222,7 @@ sampling <- function(mass, crossings = 50) {
 # Prey fitness function
 #----------------------------------------------------------------------
 
-prey.fitness <- function(benefits, mass, costs = NULL, crossings = 50, calories = 10){
+prey.fitness <- function(benefits, mass, costs = NULL, crossings = 20, calories = 20){
   
   # Basal metabolic rate (in kj/day) from Nagy 1987 https://doi.org/10.2307/1942620 
   BMR <- 0.774 + 0.727*log10(mass)
@@ -243,7 +244,7 @@ prey.fitness <- function(benefits, mass, costs = NULL, crossings = 50, calories 
   
   #Define number of prey offspring based on their excess energy
   # Individuals that had the shortest time between patches have more offspring
-  offspring <- round(excess_stand) 
+  offspring <- round(2 + excess_stand) 
   offspring <- ctmm:::clamp(offspring, min = 0, max = Inf) #Clamp the minimum to 0
   
   offspring

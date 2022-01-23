@@ -16,8 +16,6 @@ setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion")
 set.seed(1)
 
 #Import necessary packages
-library(ctmm)
-library(raster)
 library(extraDistr)
 
 #Source the functions
@@ -48,7 +46,7 @@ REPS <- 50
 GENS <- 1000
 
 # Build the raster of food patches for prey to feed on
-FOOD <- patches(mass_pred, n = 30)
+FOOD <- patches(mass_pred, n = 10)
 
 
 #Lists for storing results and drawing params
@@ -195,7 +193,7 @@ plot(lv/PREY_LV ~ generation,
      data = prey_res,
      type = "l",
      col = "red",
-     ylim = c(0,2),
+     ylim = c(0,1.2),
      ylab = "Relative change in lv",
      xlab = "Generation")
 abline(h = 1, col = 'grey30', lty = 'dashed')
