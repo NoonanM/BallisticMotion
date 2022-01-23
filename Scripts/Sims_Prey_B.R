@@ -46,7 +46,7 @@ REPS <- 50
 GENS <- 1000
 
 # Build the raster of food patches for prey to feed on
-FOOD <- patches(mass_pred, n = 10)
+FOOD <- patches(mass_pred, n = 20)
 
 
 #Lists for storing results and drawing params
@@ -117,7 +117,7 @@ for(G in 1:GENS){
     }
     
     #Calculate prey fitness
-    offspring_prey <- prey.fitness(benefits_prey, mass_prey)
+    offspring_prey <- prey.fitness(benefits_prey, mass_prey, models = PREY_mods)
     
     
     #Get the values of the prey movement model parameters
@@ -125,10 +125,12 @@ for(G in 1:GENS){
     prey_TAU_V <- vector() 
     prey_TAU_P <- vector()
     prey_SIGMA <- vector()
+    prey_SPEED <- vector()
     for(i in 1:n_prey){
       prey_TAU_V[i] <- PREY_mods[[i]]$tau["velocity"]
       prey_TAU_P[i] <- PREY_mods[[i]]$tau["position"]
       prey_SIGMA[i] <- ctmm:::area.covm(PREY_mods[[i]]$sigma)
+      prey_SPEED[i] <- summary(PREY_mods[[i]], units = FALSE)$CI[4,2]
       prey_lvs[i] <- sqrt((prey_TAU_V[i]/prey_TAU_P[i])*prey_SIGMA[i])
     }
     
@@ -137,6 +139,7 @@ for(G in 1:GENS){
                             tau_p = prey_TAU_P,
                             tau_v = prey_TAU_V,
                             sig = prey_SIGMA,
+                            speed = prey_SPEED,
                             lv = prey_lvs,
                             patches = benefits_prey,
                             offspring = offspring_prey)
@@ -198,14 +201,8 @@ plot(lv/PREY_LV ~ generation,
      xlab = "Generation")
 abline(h = 1, col = 'grey30', lty = 'dashed')
 
-# lines((lv + var)/LV ~ generation,
-#       data = prey_res,
-#       col = 'grey70')
-# lines((lv - var)/LV ~ generation,
-#       data = prey_res,
-#       col = 'grey70')
 polygon(c(prey_res$generation, rev(prey_res$generation)), c((prey_res$lv - prey_res$var)/PREY_LV, rev((prey_res$lv + prey_res$var)/PREY_LV)),
-        col = adjustcolor("grey70",alpha.f=0.5), border=NA)
+        col = adjustcolor("red",alpha.f=0.5), border=NA)
 lines(lv/PREY_LV ~ generation,
       data = prey_res,
       col = "red")
@@ -222,6 +219,24 @@ abline(lm(offspring ~ lv,
           data = prey_details), lty = 'dashed')
 
 
+plot(offspring ~ speed,
+     data = prey_details,
+     #type = "l",
+     col = "red",
+     #ylim = c(0,7),
+     xlab = "Movement speed (m/s)",
+     ylab = "Offspring")
+abline(lm(offspring ~ speed,
+          data = prey_details), lty = 'dashed')
+
+
+plot(speed ~ lv,
+     data = prey_details,
+     #type = "l",
+     col = "red",
+     #ylim = c(0,7),
+     xlab = "Ballistic lengthscale (m)",
+     ylab = "Movement speed (m/s)")
 
 
 plot(patches ~ generation,
@@ -253,4 +268,15 @@ plot(tau_v ~ generation,
      xlab = "Generation",
      ylab = "Directional persistance (sec)")
 abline(lm(tau_v ~ generation,
+          data = prey_details), lty = 'dashed')
+
+
+plot(speed ~ generation,
+     data = prey_details,
+     #type = "l",
+     col = "red",
+     #ylim = c(0,7),
+     xlab = "Generation",
+     ylab = "Movement speed (m/s)")
+abline(lm(speed ~ generation,
           data = prey_details), lty = 'dashed')

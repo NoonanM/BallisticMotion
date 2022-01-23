@@ -222,7 +222,11 @@ sampling <- function(mass, crossings = 20) {
 # Prey fitness function
 #----------------------------------------------------------------------
 
-prey.fitness <- function(benefits, mass, costs = NULL, crossings = 20, calories = 20){
+prey.fitness <- function(benefits, mass, costs = NULL, models, crossings = 20, calories = 10){
+  
+  # Extract movement speeds from the models
+  SPEED <- vector()
+  for(i in 1:length(models)){SPEED[i] <- summary(models[[i]], units = FALSE)$CI[4,2]}
   
   # Basal metabolic rate (in kj/day) from Nagy 1987 https://doi.org/10.2307/1942620 
   BMR <- 0.774 + 0.727*log10(mass)
@@ -233,8 +237,20 @@ prey.fitness <- function(benefits, mass, costs = NULL, crossings = 20, calories 
   # total lifespan in days (based on number of range crossings)
   lifespan <- round(prey.tau_p(mass)*crossings) /60/60/24
   
-  #Total energetic cost
-  COST <- BMR * lifespan
+  # Metabolic cost of movement in watts/kg from Taylor et al. 1982 https://doi.org/10.1242/jeb.97.1.1 
+  E = 10.7*(mass/1000)^(-0.316)*SPEED + 6.03*(mass/1000)^(-0.303)
+  
+  #Convert to kJ/s
+  E <- (E * (mass/1000))/1000
+  
+  # Maximum running speed in km/hr from Hirt et al. 2017 https://doi.org/10.1038/s41559-017-0241-4
+  v_max <- 25.5 * (mass/1000)^(0.26) * (1 - exp(-22*(mass/1000)^(-0.66)))
+  
+  #Convert to m/s
+  v_max <- v_max/3.6
+  
+  #Total energetic cost in kj as a function of BMR and movement speed
+  COST <- BMR * lifespan + E*prey.tau_p(mass)*crossings 
   
   # Excess energy
   excess <- benefits*calories - COST
@@ -244,7 +260,7 @@ prey.fitness <- function(benefits, mass, costs = NULL, crossings = 20, calories 
   
   #Define number of prey offspring based on their excess energy
   # Individuals that had the shortest time between patches have more offspring
-  offspring <- round(2 + excess_stand) 
+  offspring <- round(1 + excess_stand) 
   offspring <- ctmm:::clamp(offspring, min = 0, max = Inf) #Clamp the minimum to 0
   
   offspring
