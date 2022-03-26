@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# ------------Sockeye Parameters----------------- #
+
+#PBS -l walltime=168:00:00,select=1:ncpus=10:mem=187gb
+#PBS -N 10000g_Pred
+#PBS -A st-mnoonan-1
+#PBS -m abe
+#PBS -M micael.noonan@ubc.ca
+#PBS -o output.txt
+#PBS -e error.txt
+
+# ----------------Modules------------------------- #
+
+source $HOME/miniconda3/etc/profile.d/conda.sh
+conda activate ctmm
+
+# -----------------My Commands-------------------- #
+
+Rscript /scratch/st-mnoonan-1/BallisticMotion/10000g_pred.R

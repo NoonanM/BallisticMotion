@@ -1,5 +1,5 @@
 #Script for studying the evolution of ballistic length scales
-# in pred/prey systems
+# in pred/prey systems via simulation
 
 #Written by Michael Noonan
 
@@ -17,6 +17,7 @@ set.seed(1)
 
 #Import necessary packages
 library(extraDistr)
+library(parallel)
 
 #Source the functions
 source("Scripts/Functions.R")
@@ -39,14 +40,14 @@ t <- sampling(mass_prey)
 n_prey <- 10
 n_pred <- 1
 
-#Number of "arenas"
+#Number of "arenas" (becomes important when there are predators)
 REPS <- 50
 
 #Number of generations
-GENS <- 1000
+GENS <- 250
 
 # Build the raster of food patches for prey to feed on
-FOOD <- patches(mass_pred, n = 20)
+FOOD <- patches(mass_pred, width = 25, pred = T)
 
 
 #Lists for storing results and drawing params
@@ -91,9 +92,9 @@ for(G in 1:GENS){
       for(i in 1:n_prey){
         # Prey movement parameters
         prey_tau_p <- sample(PREY_tau_p, 1) + rnorm(1, 0, 10) #Add some 'mutation' based variance
-        prey_tau_p <- ctmm:::clamp(prey_tau_p, min = 0, max = Inf) #Clamp the minimum to 0
+        prey_tau_p <- ctmm:::clamp(prey_tau_p, min = 0.1, max = Inf) #Clamp the minimum to 0
         prey_tau_v <- sample(PREY_tau_v, 1) + rnorm(1, 0, 2)  #Add some 'mutation' based variance
-        prey_tau_v <- ctmm:::clamp(prey_tau_v, min = 0, max = Inf) #Clamp the minimum to 0
+        prey_tau_v <- ctmm:::clamp(prey_tau_v, min = 0.1, max = Inf) #Clamp the minimum to 0
         prey_sig <- sample(PREY_sig, 1)
         prey_lv <- sqrt((prey_tau_v/prey_tau_p)*prey_sig)
         
@@ -105,10 +106,16 @@ for(G in 1:GENS){
     
     
     #Simulate the prey movement
-    PREY_tracks <- list()
-    for(i in 1:n_prey){
-      PREY_tracks[[i]] <- simulate(PREY_mods[[i]], t = t)
-    }
+    # PREY_tracks <- list()
+    # for(i in 1:n_prey){
+    #   PREY_tracks[[i]] <- simulate(PREY_mods[[i]], t = t)
+    # }
+    
+    #Parallelised version to speed up run times
+    PREY_tracks <- mclapply(PREY_mods,
+                            FUN = simulate,
+                            t = t,
+                            mc.cores = 6)
     
     # Calculate prey benefits
     benefits_prey <- vector()
@@ -118,7 +125,10 @@ for(G in 1:GENS){
     }
     
     #Calculate prey fitness
-    offspring_prey <- prey.fitness(benefits_prey, mass_prey, models = PREY_mods)
+    offspring_prey <- prey.fitness(benefits_prey,
+                                   mass_prey,
+                                   models = PREY_mods,
+                                   calories = 12)
     
     
     #Get the values of the prey movement model parameters
@@ -131,11 +141,11 @@ for(G in 1:GENS){
       prey_TAU_V[i] <- PREY_mods[[i]]$tau["velocity"]
       prey_TAU_P[i] <- PREY_mods[[i]]$tau["position"]
       prey_SIGMA[i] <- ctmm:::area.covm(PREY_mods[[i]]$sigma)
-      prey_SPEED[i] <- summary(PREY_mods[[i]], units = FALSE)$CI[4,2]
+      prey_SPEED[i] <- if(nrow(summary(PREY_mods[[i]], units = FALSE)$CI)==4){summary(PREY_mods[[i]], units = FALSE)$CI[4,2]} else{Inf}
       prey_lvs[i] <- sqrt((prey_TAU_V[i]/prey_TAU_P[i])*prey_SIGMA[i])
     }
     
-    #Summarise the results of the prey
+    #Summarise the results of the prey 
     prey[[R]] <- data.frame(generation = G,
                             tau_p = prey_TAU_P,
                             tau_v = prey_TAU_V,
@@ -165,13 +175,13 @@ for(G in 1:GENS){
   PREY_sig <- vector()
   for(i in 1:nrow(prey)){
     if(prey[i,"offspring"] >0){
-      PREY_tau_p <- c(prey_tau_p,
+      PREY_tau_p <- c(PREY_tau_p,
                       rep(prey[i,"tau_p"], prey[i,"offspring"]))
       
-      PREY_tau_v <- c(prey_tau_v,
+      PREY_tau_v <- c(PREY_tau_v,
                       rep(prey[i,"tau_v"], prey[i,"offspring"]))
       
-      PREY_sig <- c(prey_sig,
+      PREY_sig <- c(PREY_sig,
                     rep(prey[i,"sig"], prey[i,"offspring"]))
       
     } #Closes the if statement

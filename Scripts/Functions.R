@@ -22,6 +22,43 @@ SLD <- function(x_1, y_1, x_2, y_2){
 }
 
 #----------------------------------------------------------------------
+# Generate prey movement model based on prey mass (in g)
+#----------------------------------------------------------------------
+
+# Model comes from Noonan et al. 2020  https://doi.org/10.1111/cobi.13495
+
+prey.mod <- function(mass, mu = c(0,0), variance = FALSE){
+  #Calculate
+  HR <- 0.5078955 + 1.372162*log10(mass)
+  #Back transform
+  HR <- 10^(HR)
+  #Add variance if desired
+  if(variance == TRUE){HR <- rchisq(n = length(mass), df = HR)}
+  
+  #Convert from 95% HR to var[position]
+  SIG <- HR/(-2*log(0.05)*pi)
+
+  
+  #Calculate tau_p based on correlation between tau_p and 95% HR
+  tau_p <- 1.115028 + 0.576379*log10(HR)
+  #Back transform
+  tau_p <- 10^(tau_p)
+  
+  #Calculate tau_v based on correlation between tau_v and 95% HR
+  tau_v <- 0.7840590 + 0.2396508*log10(HR)
+  #Back transform
+  tau_v <- 10^(tau_v)
+  
+  mod <- ctmm(tau = c(tau_p,tau_v),
+              mu = mu,
+              sigma = SIG)
+  
+  #Return
+  return(mod)
+}
+
+
+#----------------------------------------------------------------------
 # Generate prey var[position] based on mass (in g)
 #----------------------------------------------------------------------
 
@@ -156,16 +193,18 @@ prey.mass <- function(mass, variance = FALSE) {
 # Generate raster of food patches based on mass_prey (g)
 #----------------------------------------------------------------------
 
-patches <- function(mass, n = 20) {
+patches <- function(mass, width = 20, pred = FALSE) {
   
   # var[position]
-  SIG <- prey.SIG(mass_prey)
+  if(pred){SIG <- pred.SIG(mass)} else{
+    SIG <- prey.SIG(mass)}
   
   # Range of raster based on 99.9% HR area
-  EXT <- round(sqrt((-2*log(0.001)*pi)* SIG))
+  EXT <- round(sqrt((-2*log(0.0001)*pi)* SIG))
   
-  #patch width
-  N <- EXT/n
+  #number of patches based on fixed patch width
+  #N <- EXT/n
+  N <- EXT/width
   
   #Build the raster
   FOOD <- raster(matrix(1,N,N),
@@ -181,20 +220,20 @@ patches <- function(mass, n = 20) {
 #----------------------------------------------------------------------
 
 grazing <- function(track, habitat, metric = "patches") {
-   
-   #Patch identities
-   IDs <- suppressWarnings(cellFromXY(habitat,
-                                      SpatialPoints.telemetry(track))
-                           )
-   # Count the number of times it moved to a new food patch
-   PATCHES <- sum(diff(IDs) != 0)
-   
-   #Mean time between patches 
-   TIME <- mean(rle(c(FALSE, diff(IDs) != 0))$lengths)
-
-   if(metric == "patches"){return(PATCHES)}
-   if(metric == "time"){return(TIME)}
- }
+  
+  #Patch identities
+  IDs <- suppressWarnings(cellFromXY(habitat,
+                                     SpatialPoints.telemetry(track))
+  )
+  # Count the number of times it moved to a new food patch
+  PATCHES <- sum(diff(IDs) != 0)
+  
+  #Mean time between patches 
+  TIME <- mean(rle(c(FALSE, diff(IDs) != 0))$lengths)
+  
+  if(metric == "patches"){return(PATCHES)}
+  if(metric == "time"){return(TIME)}
+}
 
 #----------------------------------------------------------------------
 # Determine "Lifespan" and sampling interval based on mass_prey (g)
@@ -222,11 +261,11 @@ sampling <- function(mass, crossings = 20) {
 # Prey fitness function
 #----------------------------------------------------------------------
 
-prey.fitness <- function(benefits, mass, costs = NULL, models, crossings = 20, calories = 10){
+prey.fitness <- function(benefits, mass, costs = NULL, models, crossings = 20, calories = 10, constant = 1){
   
   # Extract movement speeds from the models
   SPEED <- vector()
-  for(i in 1:length(models)){SPEED[i] <- summary(models[[i]], units = FALSE)$CI[4,2]}
+  for(i in 1:length(models)){SPEED[i] <- if(nrow(summary(models[[i]], units = FALSE)$CI)==4){summary(models[[i]], units = FALSE)$CI[4,2]} else{Inf}}
   
   # Basal metabolic rate (in kj/day) from Nagy 1987 https://doi.org/10.2307/1942620 
   BMR <- 0.774 + 0.727*log10(mass)
@@ -250,20 +289,93 @@ prey.fitness <- function(benefits, mass, costs = NULL, models, crossings = 20, c
   v_max <- v_max/3.6
   
   #Total energetic cost in kj as a function of BMR and movement speed
-  COST <- BMR * lifespan + E*prey.tau_p(mass)*crossings 
+  COST <- BMR * lifespan + E*prey.tau_p(mass)*crossings*constant
   
   # Excess energy
   excess <- benefits*calories - COST
+  excess[is.infinite(excess)] <- NA
   
-  #standardise the excess energy values
-  excess_stand <- (excess - mean(excess))/sd(excess)
-  
-  #Define number of prey offspring based on their excess energy
-  # Individuals that had the shortest time between patches have more offspring
-  offspring <- round(1 + excess_stand) 
+  # Define number of prey offspring based on their excess energy and metabolic rate
+  offspring <- floor(excess/BMR)
+  offspring[is.na(offspring)] <- 0
   offspring <- ctmm:::clamp(offspring, min = 0, max = Inf) #Clamp the minimum to 0
   
+  #If maximum speed is exceeded eliminate offspring
+  offspring[(SPEED > v_max)] <- 0
+  
+  # If predator encounters are being considered,
+  # individuals that encountered a predator are killed and don't reproduce.
+  if(!is.null(costs)){offspring[costs] <- 0}
   offspring
+}
+
+#----------------------------------------------------------------------
+# Identify Encounter Events
+#----------------------------------------------------------------------
+
+encounter <- function(prey.tracks, pred.tracks, range = 50){
+  distances <- list()
+  encounters <- vector()
+  for(i in 1:length(prey.tracks)){
+    #Pairwise separation distances over time
+    distances[[i]] <- SLD(PRED_tracks[[1]]$x,PRED_tracks[[1]]$y,
+                          PREY_tracks[[i]]$x, PREY_tracks[[i]]$y)
+    
+    #Did it encounter a predator
+    encounters[i] <- any(distances[[i]]<range)
+  }
+  return(encounters)
+}
+
+#----------------------------------------------------------------------
+# Predator fitness function
+#----------------------------------------------------------------------
+
+pred.fitness <- function(encounters, mass, costs = NULL, models, time = t, calories = 10, constant = 1){
+  
+  # Extract movement speeds from the models
+  SPEED <- vector()
+  for(i in 1:length(models)){SPEED[i] <- if(nrow(summary(models[[i]], units = FALSE)$CI)==4){summary(models[[i]], units = FALSE)$CI[4,2]} else{Inf}}
+  
+  # Basal metabolic rate (in kj/day) from Nagy 1987 https://doi.org/10.2307/1942620 
+  BMR <- 0.774 + 0.727*log10(mass)
+  
+  #Back transform 
+  BMR <- 10^BMR
+  
+  # total lifespan in days (based on number of range crossings)
+  #lifespan <- round(pred.tau_p(mass)*crossings) /60/60/24
+  lifespan <- tail(t, n=1) /60/60/24
+  
+  # Metabolic cost of movement in watts/kg from Taylor et al. 1982 https://doi.org/10.1242/jeb.97.1.1 
+  E = 10.7*(mass/1000)^(-0.316)*SPEED + 6.03*(mass/1000)^(-0.303)
+  
+  #Convert to kJ/s
+  E <- (E * (mass/1000))/1000
+  
+  # Maximum running speed in km/hr from Hirt et al. 2017 https://doi.org/10.1038/s41559-017-0241-4
+  v_max <- 25.5 * (mass/1000)^(0.26) * (1 - exp(-22*(mass/1000)^(-0.66)))
+  
+  #Convert to m/s
+  v_max <- v_max/3.6
+  
+  #Total energetic cost in kj as a function of BMR and movement speed
+  COST <- BMR * lifespan + E*tail(t, n=1)*constant
+  
+  #Energy intake in kj based on Gorecki 1965 http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.915.5227&rep=rep1&type=pdf
+  mass_prey <- prey.mass(mass)
+  intake <- 1.5 * mass_prey * 4.184 * sum(encounters)
+  
+  # Excess energy
+  excess <- intake - COST
+  excess[is.infinite(excess)] <- NA
+  
+  # Define number of prey offspring based on their excess energy and metabolic rate
+  offspring <- floor(excess/BMR)
+  offspring[is.na(offspring)] <- 0
+  offspring <- ctmm:::clamp(offspring, min = 0, max = Inf) #Clamp the minimum to 0
+  
+  return(offspring)
 }
 
 #----------------------------------------------------------------------
