@@ -67,7 +67,7 @@ png(filename="Results/Prey_Movement.png",
     res = 600)
 plot(PREY_tracks,
      type = "l",
-     col = COLS[5])
+     col = "#3471bc")
 plot(rasterToPolygons(FOOD),
      add=TRUE,
      border='black',
@@ -77,7 +77,7 @@ plot(rasterToPolygons(FOOD),
 plot(PREY_tracks,
      type = "l",
      add=TRUE,
-     col = COLS[5])
+     col = "#3471bc")
 #title("Simulated movement and foraging patches for a kg prey species")
 dev.off()
 
@@ -140,25 +140,35 @@ COLS <- viridis::viridis(10)
 
 tracks <- 
     ggplot() +
-    geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
-    geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "black", size = 0.1, alpha = 0.8) +
+    # geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
+    # geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
+    geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color = "#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+    geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color ="#3471bc", size = 0.1, alpha = 0.3) +
+    geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "#e6c141", size = 0.1, alpha = 0.8) +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          axis.title.y = element_text(size=8, family = "serif"),
-          axis.title.x = element_text(size=8, family = "serif"),
-          axis.text.y = element_text(size=6, family = "serif"),
-          axis.text.x  = element_text(size=6, family = "serif"),
-          plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
+          axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+          axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+          axis.text.y = element_text(size=6, family = "sans"),
+          axis.text.x  = element_text(size=6, family = "sans"),
+          plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
           legend.position = "none",
           panel.background = element_rect(fill = "transparent"),
           plot.background = element_rect(fill = "transparent", color = NA)) +

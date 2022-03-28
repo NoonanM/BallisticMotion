@@ -30,18 +30,18 @@ prey_mass <- prey.mass(40000)
 a <- 
   ggplot(data=prey_details) +
   ggtitle("A") +
-  geom_point(aes(y=speed, x=lv), color = "#046C9A", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=speed, x=lv), color = "#3471bc", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Prey ", l[v]))) +
-  ylab(expression(paste("Movement speed (m/s)")))
+  ylab("Movement speed (m/s)")
 
 
 #----------------------------------------------------------------------
@@ -67,15 +67,15 @@ prey_details$E_total <- FMR * lifespan + E*prey.tau_p(prey_mass)*30
 b <- 
   ggplot(data=prey_details) +
   ggtitle("B") +
-  geom_point(aes(y=E_total, x=lv), color = "#046C9A", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=E_total, x=lv), color = "#3471bc", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Prey ", l[v]))) +
   ylab(expression(paste(E[total]," (kj)")))
@@ -91,15 +91,15 @@ b <-
 c <- 
   ggplot(data=prey_details) +
   ggtitle("C") +
-  geom_point(aes(y=patches, x=lv), color = "#046C9A", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=patches, x=lv), color = "#3471bc", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Prey ", l[v]))) +
   ylab("Number of patches")
@@ -114,17 +114,17 @@ c <-
 d <- 
   ggplot(data=prey_details) +
   ggtitle("D") +
-  geom_point(aes(y=patches, x=speed), color = "#046C9A", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=patches, x=speed), color = "#3471bc", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
-  xlab(expression(paste("Movement speed (m/s)"))) +
+  xlab("Movement speed (m/s)") +
   ylab("Number of patches") +
   scale_x_continuous(limits = c(0,5.8))
 
@@ -136,7 +136,7 @@ d <-
 
 plots <- grid.arrange(a,b,
                       c,d,
-                      top = "14kg Prey",
+                      #top = "14kg Prey",
                       ncol = 2)
 
 ggsave(plots,
@@ -159,18 +159,18 @@ ggsave(plots,
 a <- 
   ggplot(data=pred_details) +
   ggtitle("A") +
-  geom_point(aes(y=speed, x=lv), color = "#FF0000", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=speed, x=lv), color = "#e6c141", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Predator ", l[v]))) +
-  ylab(expression(paste("Movement speed (m/s)")))
+  ylab("Movement speed (m/s)")
 
 
 #----------------------------------------------------------------------
@@ -196,15 +196,15 @@ pred_details$E_total <- FMR * lifespan + E*prey.tau_p(prey_mass)*30
 b <- 
   ggplot(data=pred_details) +
   ggtitle("B") +
-  geom_point(aes(y=E_total, x=lv), color = "#FF0000", size = 0.2, alpha = 0.1, pch = 16) +
+  geom_point(aes(y=E_total, x=lv), color = "#e6c141", size = 0.2, alpha = 0.1, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Predator ", l[v]))) +
   ylab(expression(paste(E[total]," (kj)")))
@@ -224,15 +224,15 @@ AGG <- aggregate(encounter ~ lv2,
 c <- 
   ggplot(data=AGG) +
   ggtitle("C") +
-  geom_point(aes(y=encounter, x=lv2), color = "#FF0000", size = 1, alpha = 0.3, pch = 16) +
+  geom_point(aes(y=encounter, x=lv2), color = "#e6c141", size = 1, alpha = 0.3, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Predator ", l[v]))) +
   ylab("Number of prey encounters") #+
@@ -252,15 +252,15 @@ AGG <- aggregate(encounter ~ speed2,
 d <- 
   ggplot(data=AGG) +
   ggtitle("D") +
-  geom_point(aes(y=encounter, x=speed2), color = "#FF0000", size = 1, alpha = 0.3, pch = 16) +
+  geom_point(aes(y=encounter, x=speed2), color = "#e6c141", size = 1, alpha = 0.3, pch = 16) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none") +
   xlab(expression(paste("Movement speed (m/s)"))) +
   ylab("Number of prey encounters")
@@ -273,7 +273,7 @@ d <-
 
 plots <- grid.arrange(a,b,
                       c,d,
-                      top = "40kg Predator",
+                      #top = "40kg Predator",
                       ncol = 2)
 
 ggsave(plots,
