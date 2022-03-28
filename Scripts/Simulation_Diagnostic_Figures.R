@@ -7,11 +7,11 @@ source("Scripts/Functions.R")
 
 
 #Load in the results for the 40kg predator simulations
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey_Details.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred_Details.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Prey_Details.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Pred_Details.Rda')
 
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Prey.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Pred.Rda')
 
 
 prey_res <- do.call(rbind, prey_res)

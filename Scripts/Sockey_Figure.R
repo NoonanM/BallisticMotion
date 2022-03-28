@@ -13,12 +13,17 @@ library(cowplot)
 source("Scripts/Functions.R")
 
 
+#Pull in the phylopics from the web (All are creative commons licensed)
+wolf <- image_data("8cad2b22-30d3-4cbd-86a3-a6d2d004b201", size = 256)[[1]]
+hare <- image_data("f69eb95b-3d0d-491d-9a7f-acddd419afed", size = 256)[[1]]
+grass <- image_data("2af0a13e-69a8-4245-832e-ee3d981089b7", size = 256)[[1]]
+
 #----------------------------------------------------------------------
 # Predator and Prey lv across the mass spectrum (from simulations)
 #----------------------------------------------------------------------
 
 weights <- c(seq(5000, 100000, by = 5000))
-setwd("Scripts/Sockeye_Simulations/BallisticMotion/Results/")
+setwd("Results/Sockeye_Simulations/")
 
 RESULTS <- list()
 for(i in 1:length(weights)){
@@ -74,11 +79,11 @@ for(i in 1:length(weights)){
   #   theme_bw() +
   #   theme(panel.grid.major = element_blank(),
   #         panel.grid.minor = element_blank(),
-  #         axis.title.y = element_text(size=8, family = "serif"),
-  #         axis.title.x = element_text(size=8, family = "serif"),
-  #         axis.text.y = element_text(size=6, family = "serif"),
-  #         axis.text.x  = element_text(size=6, family = "serif"),
-  #         plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
+  #         axis.title.y = element_text(size=8, family = "sans"),
+  #         axis.title.x = element_text(size=8, family = "sans"),
+  #         axis.text.y = element_text(size=6, family = "sans"),
+  #         axis.text.x  = element_text(size=6, family = "sans"),
+  #         plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
   #         legend.position = "none") +
   #   ylab("Prey lv") + 
   #   xlab(expression(paste("Generation"))) +
@@ -94,11 +99,11 @@ for(i in 1:length(weights)){
   #   theme_bw() +
   #   theme(panel.grid.major = element_blank(),
   #         panel.grid.minor = element_blank(),
-  #         axis.title.y = element_text(size=8, family = "serif"),
-  #         axis.title.x = element_text(size=8, family = "serif"),
-  #         axis.text.y = element_text(size=6, family = "serif"),
-  #         axis.text.x  = element_text(size=6, family = "serif"),
-  #         plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
+  #         axis.title.y = element_text(size=8, family = "sans"),
+  #         axis.title.x = element_text(size=8, family = "sans"),
+  #         axis.text.y = element_text(size=6, family = "sans"),
+  #         axis.text.x  = element_text(size=6, family = "sans"),
+  #         plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
   #         legend.position = "none") +
   #   ylab("Predator lv") + 
   #   xlab(expression(paste("Generation"))) +
@@ -118,90 +123,97 @@ for(i in 1:length(weights)){
 RESULTS <- do.call(rbind, RESULTS)
 
 #RESULTS <- RESULTS[-which(RESULTS$ratio_est > 30),] #Temporarily remove runs that didn't converge
-#Run a few quick tests
-summary(lm(log10(prey_lv) ~ log10(prey_mass), data = RESULTS))
-summary(lm(log10(pred_lv) ~ log10(pred_mass), data = RESULTS))
 
+#Get CIs on the mean ratio
 test <- t.test(RESULTS$ratio_est)
+
 #####################################################################
-# Does lv scale with body size
-DATA <- data.frame(yi = RESULTS$ratio,
-                   vi = RESULTS$ratio_var,
-                   mass = RESULTS$pred_mass)
-
-#Run the meta-regression model
-lv_mass <- rma(yi, vi, mods = ~ mass, data=DATA, method="ML")
-lv_null <- rma(yi ~ 1, vi, data=DATA, method="ML")
-
-#likelihood ratio test
-anova(lv_mass,
-      lv_null)
 
 
 a <- 
   ggplot(data=RESULTS) +
   ggtitle("A") +
-  geom_point(aes(x=prey_mass/1000, y=prey_lv, size = prey_var), color = "#046C9A", alpha = 0.5,stroke = 0,shape=16) +
-  geom_point(aes(x=pred_mass/1000, y=pred_lv, size = pred_var), color = "#FF0000", alpha = 0.5,stroke = 0,shape=16)  +
-  geom_smooth(aes(x=prey_mass/1000, y=prey_lv), method = "lm", color = "#046C9A", fill = "#046C9A", se = T, size = 0.5) +
-  geom_smooth(aes(x=pred_mass/1000, y=pred_lv), method = "lm", color = "#FF0000", fill = "#FF0000", se = T, size = 0.5) +
+  geom_point(aes(x=prey_mass/1000, y=prey_lv, size = prey_var), color = "#3471bc", alpha = 0.7,stroke = 0,shape=16) +
+  geom_point(aes(x=pred_mass/1000, y=pred_lv, size = pred_var), color = "#e6c141", alpha = 0.7,stroke = 0,shape=16)  +
+  geom_smooth(aes(x=prey_mass/1000, y=prey_lv), method = "lm", color = "#3471bc", fill = "#3471bc", se = F, size = 0.5) +
+  geom_smooth(aes(x=pred_mass/1000, y=pred_lv), method = "lm", color = "#e6c141", fill = "#e6c141", se = F, size = 0.5) +
+  
+  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.3, color = "#3471bc") +
+  add_phylopic(wolf, alpha = 1, x = 1.1, y = 2.1, ysize = 0.3, color = "#e6c141") +
+  
+  ylab("Ballistic length scale (m)") +
+  xlab("Body mass (kg)") +
+  
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=10, family = "serif"),
-        axis.title.x = element_text(size=10, family = "serif"),
-        axis.text.y = element_text(size=8, family = "serif"),
-        axis.text.x  = element_text(size=8, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=10, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=10, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=8, family = "sans"),
+        axis.text.x  = element_text(size=8, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
-  ylab(expression(paste("Ballistic length scale (m)"))) +
-  xlab(expression(paste("Mass (kg)"))) +
+
   scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
                 expand = c(0,0),
-                limits = c(2,120)) +
+                limits = c(2,125)) +
   scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
-                limits = c(0.5,250))
+                limits = c(0.5,280)) +
+  annotation_logticks(outside = TRUE,
+                      size = 0.3,
+                      short = unit(0.05, "cm"),
+                      mid = unit(0.05, "cm"),
+                      long = unit(0.1, "cm")) +
+  coord_cartesian(clip = "off")
 
 
 b <- 
   ggplot(data=RESULTS) +
   ggtitle("B") +
-    geom_rect(aes(xmin = 2, xmax = Inf,
-                  ymin = test$conf.int[1],
-                  ymax = test$conf.int[2]),
-              alpha = 0.1,
-              fill = "grey80") +
+  geom_rect(aes(xmin = 2, xmax = Inf,
+                ymin = test$conf.int[1],
+                ymax = test$conf.int[2]),
+            alpha = 0.1,
+            fill = "grey80") +
   geom_hline(yintercept = median(RESULTS$ratio_est), linetype = "dashed", colour = "grey30", size = 0.5, alpha = 0.7) +
   geom_segment(aes(x=pred_mass/1000, xend=pred_mass/1000,
                    y=ratio_low,
                    yend=ratio_high),
-               color = "purple",
+               color = "#3c7a47",
                alpha = 0.5,size = 0.3) +
-  geom_point(aes(y=ratio_est, x=pred_mass/1000), color = "purple", alpha = 0.7, stroke = 0, shape=16, size = 2) +
+  geom_point(aes(y=ratio_est, x=pred_mass/1000), color = "black", fill = NA, alpha = 1, shape = 21, stroke = 0.2, size = 2) +
+  geom_point(aes(y=ratio_est, x=pred_mass/1000), color = "#3c7a47", alpha = 0.8, stroke = 0, shape=16, size = 2) +
   scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
                 expand = c(0,0),
-                limits = c(2,120)) +
+                limits = c(2,125)) +
   scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
-                limits = c(0.5,250)) +
+                limits = c(0.5,280)) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=12, family = "serif"),
-        axis.title.x = element_text(size=10, family = "serif"),
-        axis.text.y = element_text(size=8, family = "serif"),
-        axis.text.x  = element_text(size=8, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=12, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=10, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=8, family = "sans"),
+        axis.text.x  = element_text(size=8, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
-  ylab(expression(paste("Predator ", l[v], " : ", "Prey ", l[v]))) +
-  xlab(expression(paste("Predator mass (kg)")))
+  #ylab(expression(paste("Predator ", l[v], " : ", "Prey ", l[v]))) +
+  ylab("Predator:Prey") + 
+  xlab("Predator mass (kg)") +
+  annotation_logticks(outside = TRUE,
+                      size = 0.3,
+                      short = unit(0.05, "cm"),
+                      mid = unit(0.05, "cm"),
+                      long = unit(0.1, "cm")) +
+  coord_cartesian(clip = "off")
 
 
 TOP <- grid.arrange(a,b, ncol = 2)
@@ -214,12 +226,12 @@ TOP <- grid.arrange(a,b, ncol = 2)
 
 setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion")
 
-#Load in the results
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey_Details.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred_Details.Rda')
+#Load in the results for the 40kg predator simulations
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Prey_Details.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Pred_Details.Rda')
 
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Prey.Rda')
+load('Results/Sockeye_Simulations/lv_Evo_40000g_Pred.Rda')
 
 
 prey_res <- do.call(rbind, prey_res)
@@ -253,19 +265,19 @@ y <- ricker(x)
 
 inset_1 <- 
   ggplot() +
-  geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.4, size = 0.6, stroke = 0, shape=16) +
+  geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.6, size = 0.6, stroke = 0, shape=16) +
   geom_line(aes(y=y, x=x), color = "black", size = 0.2) +
-  geom_rect(aes(xmin=prey_mu - prey_sig, xmax=prey_mu + prey_sig, ymin=-Inf, ymax=Inf), fill = "#046C9A", alpha = 0.3) +
-  geom_vline(xintercept = prey_mu, linetype = "dashed", color = "#046C9A", size = 0.3) +
+  geom_rect(aes(xmin=prey_mu - prey_sig, xmax=prey_mu + prey_sig, ymin=-Inf, ymax=Inf), fill = "#3471bc", alpha = 0.3) +
+  geom_vline(xintercept = prey_mu, linetype = "dashed", color = "#3471bc", size = 0.3) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
+        axis.title.y = element_text(size=8, family = "sans"),
+        axis.title.x = element_text(size=8, family = "sans"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
         axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -303,19 +315,19 @@ pred_y <- ricker(pred_x)
 
 inset_2 <- 
   ggplot() +
-  geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.4, size = 0.6, stroke = 0, shape=16) +
+  geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.6, size = 0.6, stroke = 0, shape=16) +
   geom_line(aes(y=pred_y, x=pred_x), color = "black", size = 0.2) +
-  geom_rect(aes(xmin=pred_mu - pred_sig, xmax=pred_mu + pred_sig, ymin=-Inf, ymax=Inf), fill = "#FF0000", alpha = 0.3) +
-  geom_vline(xintercept = pred_mu, linetype = "dashed", color = "#FF0000", size = 0.3) +
+  geom_rect(aes(xmin=pred_mu - pred_sig, xmax=pred_mu + pred_sig, ymin=-Inf, ymax=Inf), fill = "#e6c141", alpha = 0.3) +
+  geom_vline(xintercept = pred_mu, linetype = "dashed", color = "#e6c141", size = 0.3) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
+        axis.title.y = element_text(size=8, family = "sans"),
+        axis.title.x = element_text(size=8, family = "sans"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
         axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -325,40 +337,46 @@ inset_2 <-
   scale_y_continuous(limits = c(0,17), expand = c(0,0.5))
 
 
-
-wolf <- image_data("8cad2b22-30d3-4cbd-86a3-a6d2d004b201", size = 256)[[1]]
-hare <- image_data("f69eb95b-3d0d-491d-9a7f-acddd419afed", size = 256)[[1]]
-grass <- image_data("2af0a13e-69a8-4245-832e-ee3d981089b7", size = 256)[[1]]
-
-
 c <-
-ggplot(data=AGG) +
+  ggplot(data=AGG) +
   ggtitle("C") +
   theme_bw() +
-  add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.2) +
-  add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.2) +
-  add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.2) +
-  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.3) +
-  add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.3) +
-  geom_text(x=0.7, y=0.87, label="Diffusive", family = "serif", size = 3) +
-  geom_text(x=0.27, y=0.87, label="Ballistic", family = "serif", size = 3) +
-  geom_text(x=0.68, y=0.58, label="Ballistic", family = "serif", size = 3) +
+  
+  add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.201) +
+  add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.2, color = "#3c7a47") +
+  add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.201) +
+  add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.2, color = "#3c7a47") +
+  add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.201) +
+  add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.2, color = "#3c7a47") +
+  
+  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.302) +
+  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.3, color = "#3471bc") +
+  
+  add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.302) +
+  add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.3, color = "#e6c141") +
+  
+  geom_text(x=0.7, y=0.87, label="Diffusive", family = "sans", size = 2.5) +
+  geom_text(x=0.27, y=0.87, label="Ballistic", family = "sans", size = 2.5) +
+  geom_text(x=0.68, y=0.58, label="Ballistic", family = "sans", size = 2.5) +
   geom_curve(aes(x = 0.4,
                  y = 0.7,
                  xend = 0.15,
                  yend = 0.7),
+             color = "#3471bc",
              arrow = arrow(length = unit(0.03, "npc"))) +
   geom_curve(aes(x = 0.55,
                  y = 0.7,
                  xend = 0.85,
                  yend = 0.7),
              curvature = -0.5,
+             color = "#3471bc",
              arrow = arrow(length = unit(0.03, "npc"))) +
   geom_curve(aes(x = 0.8,
                  y = 0.6,
                  xend = 0.55,
                  yend = 0.6),
              curvature = 0.5,
+             color = "#e6c141",
              arrow = arrow(length = unit(0.03, "npc"))) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -368,7 +386,7 @@ ggplot(data=AGG) +
         axis.text.y = element_blank(),
         axis.text.x  = element_blank(),
         axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -398,12 +416,6 @@ mass_prey <- prey.mass(mass_pred)
 t <- sampling(mass_prey, crossings = 30)
 
 
-# Build the raster of food patches for prey to feed on
-FOOD <- patches(mass_pred,
-                width = round(sqrt(pred.SIG(mass_prey))/10),
-                pred = T)
-
-
 #Generate the prey movement models
 #Generate the HR centres of the prey
 CENTRES <- rbvpois(n = 10,
@@ -411,8 +423,6 @@ CENTRES <- rbvpois(n = 10,
                    b = pred.SIG(mass_pred)*.75,
                    c = 0)
 CENTRES <- scale(CENTRES, scale = FALSE)
-
-mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"tau_p"])
 
 PREY_mods <- list()
 for(i in 1:10){
@@ -451,25 +461,35 @@ COLS <- viridis::viridis(10)
 d <- 
   ggplot() +
   ggtitle("D") +
-  geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "black", size = 0.1, alpha = 0.8) +
+  # geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
+  # geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
+  geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color = "#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+  geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color ="#3471bc", size = 0.1, alpha = 0.3) +
+  geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "#e6c141", size = 0.1, alpha = 0.8) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -482,20 +502,6 @@ d <-
 # Example of the results for a single run
 #----------------------------------------------------------------------
 
-setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion")
-
-#Load in the results
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey_Details.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred_Details.Rda')
-
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Prey.Rda')
-load('Scripts/Sockeye_Simulations/BallisticMotion/Results/lv_Evo_40000g_Pred.Rda')
-
-
-prey_res <- do.call(rbind, prey_res)
-pred_res <- do.call(rbind, pred_res)
-prey_details <- do.call(rbind, prey_details)
-pred_details <- do.call(rbind, pred_details)
 
 CIs <- data.frame(low = NA, est = NA, high = NA, standard = NA)
 for(i in 1:nrow(prey_res)){
@@ -511,38 +517,44 @@ for(i in 1:nrow(prey_res)){
 
 CIs$generation <- prey_res$generation
 
+CIs <- CIs[which(CIs$generation < 301),]
+
 e <- 
   ggplot(data=CIs) +
   ggtitle("E") +
   geom_hline(yintercept = median(RESULTS$ratio_est), linetype = "dashed", colour = "grey30", size = 0.3, alpha = 0.7) +
-  geom_line(aes(y=standard, x=generation), color = "purple", size = 0.2) +
+  geom_line(aes(y=est, x=generation), color = "#3c7a47", size = 0.2) +
   #scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000), labels = c(0,0.1,1,10,100,1000,10000)) +
   #scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000), labels = c(0,0.1,1,10,100,1000,10000)) +
-  #geom_ribbon(aes(ymin = low, ymax = high, x=generation), fill = "purple", alpha = 0.3) + 
+  geom_ribbon(aes(ymin = low, ymax = high, x=generation), fill = "#3c7a47", alpha = 0.3) + 
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif", face = "bold"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=6, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
-  ylab(expression(paste("Predator ", l[v], " : ", "Prey ", l[v]))) +
-  xlab(expression(paste("Generation")))
+  #ylab(expression(paste("Predator ", l[v], " : ", "Prey ", l[v]))) +
+  ylab("Predator:Prey") + 
+  xlab("Generation") +
+    scale_x_continuous(expand = c(0,2))
 
 
 BOT <- grid.arrange(c,d,e, ncol = 3)
 
 plots <- grid.arrange(TOP, BOT, ncol = 1, heights=c(1.5,1))
 
+
+#Save the figures
 ggsave(plots,
        width = 6.86, height = 4.5, units = "in",
        dpi = 600,
        bg = "transparent",
-       file="Results/lv_Scaling_Simulations.png")
+       file="Results/lv_Scaling_Simulations_New.png")
 
 
 
@@ -550,66 +562,16 @@ ggsave(inset_1,
        width = 3.23, height = 2, units = "in",
        dpi = 600,
        bg = "transparent",
-       file="Results/Prey_Fitness.png")
+       file="Results/Prey_Fitness2.png")
 
 
 ggsave(inset_2,
        width = 3.23, height = 2, units = "in",
        dpi = 600,
        bg = "transparent",
-       file="Results/Predator_Fitness.png")
+       file="Results/Predator_Fitness2.png")
 
 
 
-tracks <- 
-ggplot() +
-  geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "black", size = 0.1, alpha = 0.8) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "serif"),
-        axis.title.x = element_text(size=8, family = "serif"),
-        axis.text.y = element_text(size=6, family = "serif"),
-        axis.text.x  = element_text(size=6, family = "serif"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
-        legend.position = "none",
-        panel.background = element_rect(fill = "transparent"),
-        plot.background = element_rect(fill = "transparent", color = NA)) +
-  ylab("Y (m)") +
-  xlab("X (m)")
 
 
-ggsave(tracks,
-       width = 3.23, height = 3, units = "in",
-       dpi = 600,
-       bg = "transparent",
-       file="Results/Sim_Example.png")
-
-# ggplot(data=pred_res) +
-#   ggtitle("c)") +
-#   #geom_hline(yintercept = median(RESULTS$ratio_est), linetype = "dashed", colour = "grey30", size = 0.3, alpha = 0.7) +
-#   geom_line(aes(y=lv, x=generation), color = "purple", size = 0.2) +
-#   #scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000), labels = c(0,0.1,1,10,100,1000,10000)) +
-#   #scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000), labels = c(0,0.1,1,10,100,1000,10000)) +
-#   geom_ribbon(aes(ymin = lv - var, ymax = lv + var, x=generation), fill = "purple", alpha = 0.3) + 
-#   theme_bw() +
-#   theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         axis.title.y = element_text(size=8, family = "serif"),
-#         axis.title.x = element_text(size=8, family = "serif"),
-#         axis.text.y = element_text(size=6, family = "serif"),
-#         axis.text.x  = element_text(size=6, family = "serif"),
-#         plot.title = element_text(hjust = -0.05, size = 12, family = "serif"),
-#         legend.position = "none") +
-#   ylab(expression(paste("Pred ", l[v]))) +
-#   xlab(expression(paste("Generation")))
