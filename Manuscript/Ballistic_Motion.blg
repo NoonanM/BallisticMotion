@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Ballistic_Motion.aux
 The style file: Science.bst
 Database file #1: Refs.bib
-You've used 57 entries,
+You've used 58 entries,
             2300 wiz_defined-function locations,
-            1142 strings with 21000 characters,
-and the built_in function-call counts, 12424 in all, are:
-= -- 1113
-> -- 596
+            1147 strings with 21160 characters,
+and the built_in function-call counts, 12646 in all, are:
+= -- 1133
+> -- 608
 < -- 1
-+ -- 298
-- -- 149
-* -- 991
-:= -- 1895
-add.period$ -- 60
-call.type$ -- 57
++ -- 304
+- -- 152
+* -- 1009
+:= -- 1929
+add.period$ -- 61
+call.type$ -- 58
 change.case$ -- 4
 chr.to.int$ -- 0
-cite$ -- 57
-duplicate$ -- 628
-empty$ -- 1078
-format.name$ -- 198
-if$ -- 2873
+cite$ -- 58
+duplicate$ -- 639
+empty$ -- 1096
+format.name$ -- 202
+if$ -- 2924
 int.to.chr$ -- 0
-int.to.str$ -- 57
-missing$ -- 58
-newline$ -- 174
-num.names$ -- 57
-pop$ -- 257
+int.to.str$ -- 58
+missing$ -- 59
+newline$ -- 177
+num.names$ -- 58
+pop$ -- 262
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 408
+skip$ -- 415
 stack$ -- 0
-substring$ -- 614
-swap$ -- 178
+substring$ -- 624
+swap$ -- 181
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 108
-width$ -- 59
-write$ -- 454
+while$ -- 110
+width$ -- 60
+write$ -- 462

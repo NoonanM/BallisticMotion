@@ -169,8 +169,8 @@ l_v = 0.22M^{0.66}.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.9]{Figure_2}
-\caption{In A, the GPS relocations of X individuals across YY species plotted on the global map; and B shows species median ballistic motion length scales, $l_v$. The lower three scatterplots depict C the allometric scaling of the ballistic length scale, $l_v$ for herbivorous/frugivorous (red), as well as carnivorous/omnivorous (blue) mammals; D the lack of any allometry between the ratio of a predator's $l_v$ to their prey's $l_v$ for those species that consume mammalian prey; and E between the ratio of a prey's $l_v$ to their predator's $l_v$. The axes are log-scaled. The solid lines in C depict the phylogenetically controlled fitted regression models, and the dashed lines in D and E depict the median ratio.}
+\includegraphics[scale=0.9]{Empirical_Figure.png}
+\caption{In A, the GPS relocations of X individuals across YY species plotted on the global map in Winkel Tripel projection; and B shows species median ballistic motion length scales, $l_v$. The lower two scatterplots depict D the allometric scaling of the ballistic length scale, $l_v$ for herbivorous/frugivorous (blue), as well as carnivorous/omnivorous (yellow) mammals; and E the lack of any allometry between the ratio of a predator's $l_v$ to their prey's $l_v$. The axes are log-scaled. The solid lines in D depict the phylogenetically controlled fitted regression models, and the dashed lines in E depict the median ratio.}
 \label{fig:emp_res}
 \end{figure}
 
@@ -406,14 +406,26 @@ For each of the species in our dataset we compiled covariate data on that specie
 
 \subsubsection*{Assessing allometries in $l_v$}
 
-The resulting dataset of ballistic length scales was then analysed to test for any allometric relationship in $l_v$ for both carnivorous/omnivorous, or herbivorous dietary guilds. Allometries in $l_v$ were modelled for each dietary guild separately on a $\log_{10}$-$\log_{10}$ scale using generalised least-squares fitting with Gaussian distributed errors. Due to phylogenetic inertia \cite{Hansen:2005cg}, closely related species may exhibit similarities in movement due to common descent, requiring controlled comparisons \cite{Harvey:1991uo}. I WILL INCLUDE THE RESULTS OF PHYLOGENETIC VARIOGRAM ANALYSIS ON $lv$ TO CONFIRM THE NEED FOR A PHYLOGENETIC REGRESSION MODEL BUT WILL HOLD OFF ON THIS UNTIL I HAVE RE-RUN ALL OF THE EMPIRICAL ANALYSES. Accordingly, we did not treat species data records as independent, but rather corrected for this inertia by including the phylogenetic relationships among species as a random effect in our allometric regressions. Phylogenetic relationships were obtained from the VertLife repository \cite{Upham:2019}. We sampled 1,000 trees and estimated the consensus tree using the \texttt{R} package \texttt{ape} \cite{ape}. The resulting tree is shown in figure \ref{fig:phylogeny} The phylogenetic relationships among species were included as a random effect in our allometric regressions using the \texttt{R} package \texttt{nlme} \cite{Pinheiro:2018}.
+The resulting dataset of ballistic length scales was then analysed to test for any allometric relationship in $l_v$ for both carnivorous/omnivorous, or herbivorous dietary guilds. Allometries in $l_v$ were modelled for each dietary guild separately on a $\log_{10}$-$\log_{10}$ scale using generalised least-squares fitting with Gaussian distributed errors. Due to phylogenetic inertia \cite{Hansen:2005cg}, closely related species may exhibit similarities in movement due to common descent, requiring controlled comparisons \cite{Harvey:1991uo}. We applied phylogenetic variogram analysis \cite{Noonan:2022} to asses the strength of any potential phylogenetic autocorrelation in ballistic length scales between species. Phylogenetic relationships were obtained from the VertLife repository \cite{Upham:2019}. We sampled 1,000 trees and estimated the consensus tree using the \texttt{R} package \texttt{ape} \cite{ape}. The resulting tree is shown in the inset in figure \ref{fig:SVF}. Variogram analysis revealed evidence only weak phylogenetic autocorrelation (Fig.~\ref{fig:SVF}), with an OU model being selected as the best fit model describing the evolution of $l_v$.
+
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[scale=1]{Phylogeny.png}
+%\caption{Phylogenetic relationships of the Mammalian species analysed in the main text.}
+%\label{fig:phylogeny}
+%\end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.5]{Mammalia.pdf}
-\caption{Phylogenetic relationships of the Mammalian species analysed in the main text. NOTE: THIS IS THE OLD PHYLOGENETIC TREE. I NEED TO INCLUDE THE UPDATED ONE BUT AM WAITING UNTIL I RE-RUN THE EMPIRICAL ANALYSES WITH THE NEW DATASET.}
-\label{fig:phylogeny}
+\includegraphics[scale=1]{Ballistic_Motion_SVF.png}
+\caption{Empirical semi-variogram on Mammalian ballistic length scale. The black lines depict the estimated semi-variance at different time lags, wheres the grey shading show the 95\% confidence intervals. The red line and shading depict the estimated semi-variance under an Independent and Identically Distributed IID process. The inset shows the phylogenetic relationships of the Mammalian species analysed in the main text, coloured by dietary guild.}
+\label{fig:SVF}
 \end{figure}
+
+
+Accordingly, we did not treat species data records as independent, but rather corrected for this inertia by including the phylogenetic relationships among species as a random effect in our allometric regressions. The phylogenetic relationships among species were included as a random effect in our allometric regressions using the \texttt{R} package \texttt{nlme} \cite{Pinheiro:2018}.
+
+
 
 The final step in our analyses was to determine whether the stabilising selection around a mass invariant ration between predator and prey $l_v$ we found in our simulation study could also be observed in the empirical movement data. This required estimating the ratio of predator:prey $l_v$ for each species in our dataset. For this, we used the fitted allometric models described above to predict $l_v$ for the median body mass of each species' predators and prey. We then fit two models to these data, one that included a correlation with body mass, and an intercept only model. The relative support for these two models was then assessed using likelihood ratio tests.
 

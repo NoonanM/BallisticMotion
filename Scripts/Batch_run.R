@@ -15,7 +15,7 @@ FILES <- list.files("~/Dropbox (Personal)/MultiSpecies_Data/Mammals",
 
 
 #Then walk through each of them sequentially
-for(i in 6:length(FILES)){
+for(i in 43:length(FILES)){ #didn't do 1 or 6 or 15 take forever 26 was an error
   
   #Load in the tracking data
   DATA <- get(load(FILES[i]))
@@ -44,6 +44,16 @@ for(i in 6:length(FILES)){
     
     uere(DATA) <- UERE
     
+  } else if(BINOMIAL == "Myrmecophaga_tridactyla"){
+    
+    #Drop outliers
+    DATA <- DATA[which(DATA$OUT == 0),]
+    
+    #Calibrate measurement error
+    DATA <- as.telemetry(DATA)
+    UERE <- uere.fit(DATA[43])
+    DATA <- DATA[-43]
+    uere(DATA) <- UERE
   } else {
     
     
@@ -87,9 +97,9 @@ for(i in 6:length(FILES)){
     if(!is.infinite(uere(cilla)[[3]])){error <- TRUE}
     
     #Turn error on for the datasets with DOP values
-    if("vx" %in% names(cilla)){error <- TRUE}
-    if("HDOP" %in% names(cilla)){error <- TRUE}
-    if("DOP" %in% names(cilla)){error <- TRUE}
+    #if("vx" %in% names(cilla)){error <- TRUE}
+    #if("HDOP" %in% names(cilla)){error <- TRUE}
+    #if("DOP" %in% names(cilla)){error <- TRUE}
     
     RESULTS <- tryCatch(
       
