@@ -64,6 +64,9 @@
 \affil[3]{\small University of Maryland College Park, College Park, MD, USA}
 \affil[4]{\small Smithsonian Conservation Biology Institute, Front Royal, VA, USA}
 
+\author[2]{Benjamin Garcia De Figueiredo}
+\affil[2]{\small ICTP South American Institute for Fundamental Research \& Instituto de Física Teórica, Universidade Estadual Paulista - UNESP, Rua Dr. Bento Teobaldo Ferraz 271, Bloco 2 - Barra Funda, 01140-070 São Paulo, SP, Brazil}
+
 \author[]{DATA PROVIDERS}
 
 \author[5,6,7]{Justin M. Calabrese}
@@ -225,13 +228,13 @@ References \textit{(4-10)}
 
 \subsection*{Math}
 
-
+We analyzed the dependence of the mean first encounter time between and prey and its predator. We modeled both prey and predator movement using Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. The spatial variances and the positional autocorrelation timescales for each model where parameterized according to allometric relationship (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We further parameterized the prey:predator body mass ration using the allometric relationship in (\ref{eq:bodymass-sc}). 
 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=1]{pair-mfet.png}
-\caption{.}
+\includegraphics[width=\textwidth]{pair-mfet.png}
+\caption{Mean first encounter time in prey predator pair exhibiting OUF movement. Home-range sizes and the positional autocorrelation timescale were parameterized using the allometric scaling laws in (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We used a predator body mass of $10$\,Kg and prey mass was calculated using (\ref{eq:bodymass-sc}). The distance between home-range centers is $2$ (m??? NOT SURE IF THIS IS THE LENGTH SCALE IN THE SCALING LAWS).}
 \label{fig:mfet-pairs}
 \end{figure}
 
@@ -254,7 +257,7 @@ We used a series of stochastic simulations to explore how ballistic length scale
 
 Prey movement were simulated based on Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. For the prey movement models, all initial parameter values were simulated based on established allometric relationships with prey mass estimated by Noonan et al. \cite{Noonan:2020}. The spatial variances were simulated as
 
-\begin{gather}
+\begin{gather}\label{eq:prey-allo}
 \log_{10}(\mathrm{95\%~home~range}) = 0.5078955 + 1.372162 \log_{10}(\mathrm{mass}) \\
 %\mathrm{VAR}[\mathrm{position}] = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi}
 \sigma_p = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi},
@@ -262,7 +265,7 @@ Prey movement were simulated based on Ornstein-Uhlenbeck-Foraging (OUF) processe
 
 the positional autocorrelation timescales as
 
-\begin{gather}
+\begin{gather}\label{eq:prey-allo-taup}
 \log_{10}(\E[\tau_\mathrm{position}]) = 1.2994292 + 0.8129125 \log_{10}(\mathrm{mass}).
 \end{gather}
 
@@ -279,14 +282,14 @@ Variance was then added around the initial values of $\E[\tau_\mathrm{position}]
 
 Predator movement were also simulated based on OUF processes. For the predator movement models, all initial parameter values were again simulated based on established allometric relationships with prey mass estimated by Noonan et al. \cite{Noonan:2020}. The spatial variances were simulated as
 
-\begin{gather}
+\begin{gather}\label{eq:predator-allo}
 \log_{10}(\mathrm{95\%~home~range}) = 1.089972 + 1.478050 \log_{10}(\mathrm{mass}) \\
 \sigma_p = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi},
 \end{gather}
 
 and the positional autocorrelation timescales as
 
-\begin{gather}
+\begin{gather}\label{eq:predator-allo-taup}
 \log_{10}(\E[\tau_\mathrm{position}]) = 1.612761 + 0.766461 \log_{10}(\mathrm{mass}).
 \end{gather}
 
@@ -374,7 +377,7 @@ The relationships between energetic costs, prey encounters, and predator movemen
 \subsubsection*{Simulations}
 
 Our primary aim with this simulation study was to explore how predator-prey dynamics might be expected to evolve across the body mass spectrum. We therefore explored 20 predator-prey systems of various pairwise body sizes. For these we generated 20 pairs of predator and prey founding populations. Predator body sizes ranged between 5 and 100kg by intervals of 5kg, whereas prey body sizes were determined by predator body size using the allometries derived in \cite{Tucker:2014b} 
-\begin{gather}
+\begin{gather}\label{eq:bodymass-sc}
 \log_{10}(\E[\mathrm{mass_{prey}}]) = -0.87 + 1.26 \log_{10}(\mathrm{mass_{predator}})
 \end{gather}
 The simulated population consisted of 500 prey and 50 predators with movement parameters for OUF models that were calculated as defined above. Individuals moved within movement `landscapes'. Each landscape consisted of 1 predator, 10 randomly distributed prey, and homogeneously distributed prey foraging patches. This landscape setup was held constant across all simulations in order to avoid and density dependent effects. Individuals moved for a fixed duration of 30 prey range crossings (defined by prey $\tau_p$). Predator and prey fitness were calculated using the functions defined above. Individuals passed on their movement parameters to the following generation based on their fitness. As noted in Eq. (\ref{eq:lv}) the main text, the average length scale over which ballistic motion is maintained ($l_v$, in m) is a function of the spatial variance of an animal's movement process ($\sigma_{\mathrm{position}}$, in m$^2$) and its positional and velocity autocorrelation timescales ($\tau_{\mathrm{position}}$ and $\tau_\mathrm{velocity}$ respectively, in sec). In this regard, we simulated the predator and prey spatial variance $\sigma_{\mathrm{position}}$ based on a purely deterministic model, whereas $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ were drawn from chi-square distributions. As such, $\tau_\mathrm{position}$ and $\tau_\mathrm{velocity}$ were the only two parameters defining $l_v$ that were free to evolve by natural selection in our simulations.
