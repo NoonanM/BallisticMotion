@@ -228,7 +228,13 @@ References \textit{(4-10)}
 
 \subsection*{Math}
 
-We analyzed the dependence of the mean first encounter time between and prey and its predator. We modeled both prey and predator movement using Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. The spatial variances and the positional autocorrelation timescales for each model where parameterized according to allometric relationship (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We further parameterized the prey:predator body mass ration using the allometric relationship in (\ref{eq:bodymass-sc}). 
+We analyzed the dependence of the mean first encounter time between and prey and its predator. We modeled both prey and predator movement using Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. The spatial variances and the positional autocorrelation timescales for each model where parameterized according to allometric relationship (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We further parameterized the prey:predator body mass ration using the allometric relationship in (\ref{eq:bodymass-sc}).
+
+To obtain the meand first encounter time we simulated $10^5$ independent realizations of a prey-predator pair of OUF processes. In each OUF realization the initial location and velocity of each individual were sorted from their steady-state probability density functions \cite{Fleming:2014jr,Fleming:2014gd}. We ran the simulations using an Euler algorithm for stochastic differential equations with time step $dt=10^{-3}$ to integrate the pair of coupled SDEs that define the OUF process. We stopped each realization when distance between both trajectories was below an encounter distance $q=0.1$. Because our results do not depend qualitatively on the specific value of $q$ and on the distance between home-range centers, we choose these values to make encounters more frequent and thus reduce computation time. 
+
+Our results show that the mean first encounter time increases monotonically with the positional autocorrelation time scale, $\tau_p$, 
+
+
 
 
 \begin{figure}[!h]
