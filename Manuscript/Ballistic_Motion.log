@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  11 APR 2022 12:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  12 APR 2022 14:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -298,71 +298,72 @@ Underfull \hbox (badness 5231) in paragraph at lines 185--187
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 229.
  [10]
-<pair-mfet.png, id=48, 13398.055pt x 4836.0675pt>
-File: pair-mfet.png Graphic file (type png)
-<use pair-mfet.png>
-Package pdftex.def Info: pair-mfet.png  used on input line 242.
-(pdftex.def)             Requested size: 455.24408pt x 164.26178pt.
+<saturation.pdf, id=48, 602.25pt x 401.5pt>
+File: saturation.pdf Graphic file (type pdf)
+<use saturation.pdf>
+Package pdftex.def Info: saturation.pdf  used on input line 237.
+(pdftex.def)             Requested size: 295.90587pt x 197.27583pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[11] [12 <./pair-mfet.png>] [13]
-<Prey_Movement.png, id=62, 233.4321pt x 204.16275pt>
+[11] [12 <./saturation.pdf>] [13]
+<Prey_Movement.png, id=75, 233.4321pt x 204.16275pt>
 File: Prey_Movement.png Graphic file (type png)
 <use Prey_Movement.png>
-Package pdftex.def Info: Prey_Movement.png  used on input line 317.
+Package pdftex.def Info: Prey_Movement.png  used on input line 307.
 (pdftex.def)             Requested size: 233.43152pt x 204.16225pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [14] [15 <./Prey_Movement.png>]
-<Prey_Diagnostics.png, id=72, 495.7722pt x 433.62pt>
+<Prey_Diagnostics.png, id=85, 495.7722pt x 433.62pt>
 File: Prey_Diagnostics.png Graphic file (type png)
 <use Prey_Diagnostics.png>
-Package pdftex.def Info: Prey_Diagnostics.png  used on input line 348.
+Package pdftex.def Info: Prey_Diagnostics.png  used on input line 338.
 (pdftex.def)             Requested size: 495.77098pt x 433.61894pt.
 
-Overfull \hbox (40.5269pt too wide) in paragraph at lines 348--349
+Overfull \hbox (40.5269pt too wide) in paragraph at lines 338--339
  [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Sim_Example.png, id=73, 233.4321pt x 216.81pt>
+<Sim_Example.png, id=86, 233.4321pt x 216.81pt>
 File: Sim_Example.png Graphic file (type png)
 <use Sim_Example.png>
-Package pdftex.def Info: Sim_Example.png  used on input line 361.
+Package pdftex.def Info: Sim_Example.png  used on input line 351.
 (pdftex.def)             Requested size: 233.43152pt x 216.80946pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Predator_Diagnostics.png, id=74, 495.7722pt x 433.62pt>
+[16] [17 <./Prey_Diagnostics.png>]
+<Predator_Diagnostics.png, id=94, 495.7722pt x 433.62pt>
 File: Predator_Diagnostics.png Graphic file (type png)
 <use Predator_Diagnostics.png>
-Package pdftex.def Info: Predator_Diagnostics.png  used on input line 375.
+Package pdftex.def Info: Predator_Diagnostics.png  used on input line 365.
 (pdftex.def)             Requested size: 495.77098pt x 433.61894pt.
 
-Overfull \hbox (40.5269pt too wide) in paragraph at lines 375--376
+Overfull \hbox (40.5269pt too wide) in paragraph at lines 365--366
  [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[16] [17 <./Prey_Diagnostics.png>] [18 <./Sim_Example.png>] [19 <./Predator_Dia
-gnostics.png>]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 391.
+[18 <./Sim_Example.png>] [19 <./Predator_Diagnostics.png>]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 381.
 
- (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-<Convergence_Plots.png, id=91, 466.74374pt x 568.40355pt>
+<Convergence_Plots.png, id=104, 466.74374pt x 568.40355pt>
 File: Convergence_Plots.png Graphic file (type png)
 <use Convergence_Plots.png>
-Package pdftex.def Info: Convergence_Plots.png  used on input line 395.
+Package pdftex.def Info: Convergence_Plots.png  used on input line 385.
 (pdftex.def)             Requested size: 420.06549pt x 511.55847pt.
 
 
@@ -372,52 +373,46 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: Text page 21 contains only floats.
 
-[21 <./Convergence_Plots.png (PNG copy)>] [22]
-<Ballistic_Motion_SVF.png, id=102, 495.7722pt x 289.08pt>
+[21 <./Convergence_Plots.png (PNG copy)>] [22] [23]
+<Ballistic_Motion_SVF.png, id=118, 495.7722pt x 289.08pt>
 File: Ballistic_Motion_SVF.png Graphic file (type png)
 <use Ballistic_Motion_SVF.png>
-Package pdftex.def Info: Ballistic_Motion_SVF.png  used on input line 434.
+Package pdftex.def Info: Ballistic_Motion_SVF.png  used on input line 424.
 (pdftex.def)             Requested size: 495.77098pt x 289.07928pt.
 
-Overfull \hbox (40.5269pt too wide) in paragraph at lines 434--435
+Overfull \hbox (40.5269pt too wide) in paragraph at lines 424--425
  [][] 
  []
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[23] [24 <./Ballistic_Motion_SVF.png>] [25] (./Ballistic_Motion.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[24 <./Ballistic_Motion_SVF.png>] [25] (./Ballistic_Motion.aux) ) 
 Here is how much of TeX's memory you used:
  2790 strings out of 492616
- 37538 string characters out of 6129482
+ 37567 string characters out of 6129482
  105200 words of memory out of 5000000
  6637 multiletter control sequences out of 15000+600000
  29526 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,10n,27p,1812b,292s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
-xlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
-live/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texli
-ve/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive
-/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2
-019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2019
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2019/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2019/texmf
--dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2019/t
-exmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/texmf-dis
-t/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/ty
-pe1/urw/times/utmr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/ti
-mes/utmri8a.pfb>
-Output written on Ballistic_Motion.pdf (25 pages, 7889182 bytes).
+{/usr/local/te
+xlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2019/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2019/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2019/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2019/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2019/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2019/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2019/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type
+1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2019/texmf-dist/fonts/
+type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/ur
+w/times/utmb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/times/ut
+mr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+
+Output written on Ballistic_Motion.pdf (25 pages, 6585947 bytes).
 PDF statistics:
- 161 PDF objects out of 1000 (max. 8388607)
- 101 compressed objects within 2 object streams
+ 174 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

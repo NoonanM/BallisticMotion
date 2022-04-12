@@ -230,24 +230,14 @@ References \textit{(4-10)}
 
 We analyzed the dependence of the mean first encounter time between and prey and its predator. We modeled both prey and predator movement using Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. The spatial variances and the positional autocorrelation timescales for each model where parameterized according to allometric relationship (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We further parameterized the prey:predator body mass ration using the allometric relationship in (\ref{eq:bodymass-sc}).
 
-To obtain the meand first encounter time we simulated $10^5$ independent realizations of a prey-predator pair of OUF processes. In each OUF realization the initial location and velocity of each individual were sorted from their steady-state probability density functions \cite{Fleming:2014jr,Fleming:2014gd}. We ran the simulations using an Euler algorithm for stochastic differential equations with time step $dt=10^{-3}$ to integrate the pair of coupled SDEs that define the OUF process. We stopped each realization when distance between both trajectories was below an encounter distance $q=0.1$. Because our results do not depend qualitatively on the specific value of $q$ and on the distance between home-range centers, we choose these values to make encounters more frequent and thus reduce computation time. 
-
-Our results show that the mean first encounter time increases monotonically with the positional autocorrelation time scale, $\tau_p$, 
-
-
-
+To obtain the meand first encounter time we simulated $10^5$ independent realizations of a prey-predator pair of OUF processes. In each OUF realization the initial location and velocity of each individual were sorted from their steady-state probability density functions \cite{Fleming:2014jr,Fleming:2014gd}. We ran the simulations using an Euler algorithm for stochastic differential equations with time step $dt=10^{-3}$ to integrate the pair of coupled SDEs that define the OUF process. We stopped each realization when distance between both trajectories was below an encounter distance $q=0.1$. Because our results do not depend qualitatively on the specific value of $q$ and on the distance between home-range centers, we choose these values to make encounters more frequent and thus reduce computation time. Our results show that the mean first encounter time increases monotonically with the average length scale over which prey maintain ballistic motion, $l_v$, regardless of the autocorrelation in the velocity of the predator. Therefore, prey fitness benefits related to more ballistic motion saturate are bounded.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{pair-mfet.png}
-\caption{Mean first encounter time in prey predator pair exhibiting OUF movement. Home-range sizes and the positional autocorrelation timescale were parameterized using the allometric scaling laws in (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We used a predator body mass of $10$\,Kg and prey mass was calculated using (\ref{eq:bodymass-sc}). The distance between home-range centers is $2$ (m??? NOT SURE IF THIS IS THE LENGTH SCALE IN THE SCALING LAWS).}
+\includegraphics[width=0.65\textwidth]{saturation.pdf}
+\caption{Mean first encounter time in a prey predator pair exhibiting OUF movement. Home-range sizes and the positional autocorrelation timescale were parameterized using the allometric scaling laws in (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. Predator body mass $m=10$\,Kg and prey mass was calculated using (\ref{eq:bodymass-sc}). The distance between home-range centers is $1$ (km??? NOT SURE IF THIS IS THE LENGTH SCALE IN THE SCALING LAWS // ALSO NOT SURE ABOUT THE UNITS OF THE MFET (DAYS, SECONDS, MIN...).}
 \label{fig:mfet-pairs}
 \end{figure}
-
-
-
-
-
 
 
 % ----------------------------------------------------------------
