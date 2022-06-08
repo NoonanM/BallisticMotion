@@ -127,6 +127,10 @@ RESULTS <- do.call(rbind, RESULTS)
 #Get CIs on the mean ratio
 test <- t.test(RESULTS$ratio_est)
 
+summary(lm(log10(prey_lv) ~ log10(prey_mass), data = RESULTS))
+summary(lm(log10(pred_lv) ~ log10(pred_mass), data = RESULTS))
+summary(lm(log10(ratio_est) ~ log10(pred_mass), data = RESULTS))
+
 #####################################################################
 
 
@@ -263,21 +267,21 @@ ricker <- function(x) {
 x <- seq(0,150, 0.01)
 y <- ricker(x)
 
-inset_1 <- 
+c <- 
   ggplot() +
+  ggtitle("C") +
   geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.6, size = 0.6, stroke = 0, shape=16) +
-  geom_line(aes(y=y, x=x), color = "black", size = 0.2) +
+  #geom_line(aes(y=y, x=x), color = "black", size = 0.2) +
   geom_rect(aes(xmin=prey_mu - prey_sig, xmax=prey_mu + prey_sig, ymin=-Inf, ymax=Inf), fill = "#3471bc", alpha = 0.3) +
   geom_vline(xintercept = prey_mu, linetype = "dashed", color = "#3471bc", size = 0.3) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "sans"),
-        axis.title.x = element_text(size=8, family = "sans"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
         axis.text.y = element_text(size=6, family = "sans"),
         axis.text.x  = element_text(size=6, family = "sans"),
-        axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -313,21 +317,21 @@ ricker <- function(x) {
 pred_x <- seq(0,450, 0.01)
 pred_y <- ricker(pred_x)
 
-inset_2 <- 
+d <- 
   ggplot() +
+  ggtitle("D") +
   geom_point(data=AGG, aes(y=offspring, x=lv2), col = "grey70", alpha = 0.6, size = 0.6, stroke = 0, shape=16) +
-  geom_line(aes(y=pred_y, x=pred_x), color = "black", size = 0.2) +
+  #geom_line(aes(y=pred_y, x=pred_x), color = "black", size = 0.2) +
   geom_rect(aes(xmin=pred_mu - pred_sig, xmax=pred_mu + pred_sig, ymin=-Inf, ymax=Inf), fill = "#e6c141", alpha = 0.3) +
   geom_vline(xintercept = pred_mu, linetype = "dashed", color = "#e6c141", size = 0.3) +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "sans"),
-        axis.title.x = element_text(size=8, family = "sans"),
+        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
         axis.text.y = element_text(size=6, family = "sans"),
         axis.text.x  = element_text(size=6, family = "sans"),
-        axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA)) +
@@ -337,62 +341,62 @@ inset_2 <-
   scale_y_continuous(limits = c(0,17), expand = c(0,0.5))
 
 
-c <-
-  ggplot(data=AGG) +
-  ggtitle("C") +
-  theme_bw() +
-  
-  add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.201) +
-  add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.2, color = "#3c7a47") +
-  add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.201) +
-  add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.2, color = "#3c7a47") +
-  add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.201) +
-  add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.2, color = "#3c7a47") +
-  
-  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.302) +
-  add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.3, color = "#3471bc") +
-  
-  add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.302) +
-  add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.3, color = "#e6c141") +
-  
-  geom_text(x=0.7, y=0.87, label="Diffusive", family = "sans", size = 2.5) +
-  geom_text(x=0.27, y=0.87, label="Ballistic", family = "sans", size = 2.5) +
-  geom_text(x=0.68, y=0.58, label="Ballistic", family = "sans", size = 2.5) +
-  geom_curve(aes(x = 0.4,
-                 y = 0.7,
-                 xend = 0.15,
-                 yend = 0.7),
-             color = "#3471bc",
-             arrow = arrow(length = unit(0.03, "npc"))) +
-  geom_curve(aes(x = 0.55,
-                 y = 0.7,
-                 xend = 0.85,
-                 yend = 0.7),
-             curvature = -0.5,
-             color = "#3471bc",
-             arrow = arrow(length = unit(0.03, "npc"))) +
-  geom_curve(aes(x = 0.8,
-                 y = 0.6,
-                 xend = 0.55,
-                 yend = 0.6),
-             curvature = 0.5,
-             color = "#e6c141",
-             arrow = arrow(length = unit(0.03, "npc"))) +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        axis.title.y = element_blank(),
-        axis.title.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.text.x  = element_blank(),
-        axis.ticks = element_blank(),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
-        legend.position = "none",
-        panel.background = element_rect(fill = "transparent"),
-        plot.background = element_rect(fill = "transparent", color = NA)) +
-  scale_y_continuous(limits = c(0,1)) +
-  scale_x_continuous(limits = c(0,1))
-
+# c <-
+#   ggplot(data=AGG) +
+#   ggtitle("C") +
+#   theme_bw() +
+#   
+#   add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.201) +
+#   add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.2, color = "#3c7a47") +
+#   add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.201) +
+#   add_phylopic(grass, alpha = 1, x = 0.18, y = 0.45, ysize = 0.2, color = "#3c7a47") +
+#   add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.201) +
+#   add_phylopic(grass, alpha = 1, x = 0.07, y = 0.3, ysize = 0.2, color = "#3c7a47") +
+#   
+#   add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.302) +
+#   add_phylopic(hare, alpha = 1, x = 0.5, y = 0.5, ysize = 0.3, color = "#3471bc") +
+#   
+#   add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.302) +
+#   add_phylopic(wolf, alpha = 1, x = 0.9, y = 0.5, ysize = 0.3, color = "#e6c141") +
+#   
+#   geom_text(x=0.7, y=0.87, label="Diffusive", family = "sans", size = 2.5) +
+#   geom_text(x=0.27, y=0.87, label="Ballistic", family = "sans", size = 2.5) +
+#   geom_text(x=0.68, y=0.58, label="Ballistic", family = "sans", size = 2.5) +
+#   geom_curve(aes(x = 0.4,
+#                  y = 0.7,
+#                  xend = 0.15,
+#                  yend = 0.7),
+#              color = "#3471bc",
+#              arrow = arrow(length = unit(0.03, "npc"))) +
+#   geom_curve(aes(x = 0.55,
+#                  y = 0.7,
+#                  xend = 0.85,
+#                  yend = 0.7),
+#              curvature = -0.5,
+#              color = "#3471bc",
+#              arrow = arrow(length = unit(0.03, "npc"))) +
+#   geom_curve(aes(x = 0.8,
+#                  y = 0.6,
+#                  xend = 0.55,
+#                  yend = 0.6),
+#              curvature = 0.5,
+#              color = "#e6c141",
+#              arrow = arrow(length = unit(0.03, "npc"))) +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_blank(),
+#         axis.title.y = element_blank(),
+#         axis.title.x = element_blank(),
+#         axis.text.y = element_blank(),
+#         axis.text.x  = element_blank(),
+#         axis.ticks = element_blank(),
+#         plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
+#         legend.position = "none",
+#         panel.background = element_rect(fill = "transparent"),
+#         plot.background = element_rect(fill = "transparent", color = NA)) +
+#   scale_y_continuous(limits = c(0,1)) +
+#   scale_x_continuous(limits = c(0,1))
+# 
 
 # c <-
 #   ggdraw() +
@@ -405,98 +409,98 @@ c <-
 # Example of the simulated movement data
 #----------------------------------------------------------------------
 
-
-#Predator mass (g)
-mass_pred <- 40000
-
-#Prey mass (g)
-mass_prey <- prey.mass(mass_pred)
-
-#"Lifespan" and sampling interval for the simulations
-t <- sampling(mass_prey, crossings = 30)
-
-
-#Generate the prey movement models
-#Generate the HR centres of the prey
-CENTRES <- rbvpois(n = 10,
-                   a = pred.SIG(mass_pred)*.75,
-                   b = pred.SIG(mass_pred)*.75,
-                   c = 0)
-CENTRES <- scale(CENTRES, scale = FALSE)
-
-PREY_mods <- list()
-for(i in 1:10){
-  # Prey movement parameters
-  prey_tau_p <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"tau_p"])
-  prey_tau_v <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"tau_v"])
-  prey_sig <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"sig"])
-  
-  PREY_mods[[i]] <- ctmm(tau = c(prey_tau_p,prey_tau_v),
-                         mu = c(CENTRES[i,1],CENTRES[i,2]),
-                         sigma = prey_sig)
-} #Closes loop over n_prey
-
-
-# Predator movement parameters
-pred_tau_p <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"tau_p"])
-pred_tau_v <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"tau_v"])
-pred_sig <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"sig"])
-
-PRED_mod <- ctmm(tau = c(pred_tau_p,
-                         pred_tau_v),
-                 mu = c(0,0),
-                 sigma = pred_sig)
-
-#Simulate the prey movement
-#Parallelised to speed up run times
-PREY_tracks <- lapply(PREY_mods,
-                      FUN = simulate,
-                      t = t)
-
-#Simulate the predator movement
-PRED_tracks <- simulate(PRED_mod,t = t)
-
-COLS <- viridis::viridis(10)
-
-d <- 
-  ggplot() +
-  ggtitle("D") +
-  # geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
-  # geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color = "#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
-  geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color ="#3471bc", size = 0.1, alpha = 0.3) +
-  geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "#e6c141", size = 0.1, alpha = 0.8) +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title.y = element_text(size=8, family = "sans", face = "bold"),
-        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
-        axis.text.y = element_text(size=6, family = "sans"),
-        axis.text.x  = element_text(size=6, family = "sans"),
-        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
-        legend.position = "none",
-        panel.background = element_rect(fill = "transparent"),
-        plot.background = element_rect(fill = "transparent", color = NA)) +
-  ylab("Y (m)") +
-  xlab("X (m)")
-
-
+# 
+# #Predator mass (g)
+# mass_pred <- 40000
+# 
+# #Prey mass (g)
+# mass_prey <- prey.mass(mass_pred)
+# 
+# #"Lifespan" and sampling interval for the simulations
+# t <- sampling(mass_prey, crossings = 30)
+# 
+# 
+# #Generate the prey movement models
+# #Generate the HR centres of the prey
+# CENTRES <- rbvpois(n = 10,
+#                    a = pred.SIG(mass_pred)*.75,
+#                    b = pred.SIG(mass_pred)*.75,
+#                    c = 0)
+# CENTRES <- scale(CENTRES, scale = FALSE)
+# 
+# PREY_mods <- list()
+# for(i in 1:10){
+#   # Prey movement parameters
+#   prey_tau_p <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"tau_p"])
+#   prey_tau_v <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"tau_v"])
+#   prey_sig <- mean(prey_details[which(prey_details$generation == max(prey_details$generation)),"sig"])
+#   
+#   PREY_mods[[i]] <- ctmm(tau = c(prey_tau_p,prey_tau_v),
+#                          mu = c(CENTRES[i,1],CENTRES[i,2]),
+#                          sigma = prey_sig)
+# } #Closes loop over n_prey
+# 
+# 
+# # Predator movement parameters
+# pred_tau_p <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"tau_p"])
+# pred_tau_v <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"tau_v"])
+# pred_sig <- mean(pred_details[which(pred_details$generation == max(pred_details$generation)),"sig"])
+# 
+# PRED_mod <- ctmm(tau = c(pred_tau_p,
+#                          pred_tau_v),
+#                  mu = c(0,0),
+#                  sigma = pred_sig)
+# 
+# #Simulate the prey movement
+# #Parallelised to speed up run times
+# PREY_tracks <- lapply(PREY_mods,
+#                       FUN = simulate,
+#                       t = t)
+# 
+# #Simulate the predator movement
+# PRED_tracks <- simulate(PRED_mod,t = t)
+# 
+# COLS <- viridis::viridis(10)
+# 
+# d <- 
+#   ggplot() +
+#   ggtitle("D") +
+#   # geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color =COLS[1], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color =COLS[2], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color =COLS[3], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color =COLS[4], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color =COLS[5], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color =COLS[6], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color =COLS[7], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color =COLS[8], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color =COLS[9], size = 0.1, alpha = 0.3) +
+#   # geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color =COLS[10], size = 0.1, alpha = 0.3) +
+#   geom_path(aes(y=PREY_tracks[[1]]$y, x=PREY_tracks[[1]]$x), color = "#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[2]]$y, x=PREY_tracks[[2]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[3]]$y, x=PREY_tracks[[3]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[4]]$y, x=PREY_tracks[[4]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[5]]$y, x=PREY_tracks[[5]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[6]]$y, x=PREY_tracks[[6]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[7]]$y, x=PREY_tracks[[7]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[8]]$y, x=PREY_tracks[[8]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[9]]$y, x=PREY_tracks[[9]]$x), color ="#3471bc", size = 0.1, alpha = 0.2) +
+#   geom_path(aes(y=PREY_tracks[[10]]$y, x=PREY_tracks[[10]]$x), color ="#3471bc", size = 0.1, alpha = 0.3) +
+#   geom_path(aes(y=PRED_tracks$y, x=PRED_tracks$x), color = "#e6c141", size = 0.1, alpha = 0.8) +
+#   theme_bw() +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         axis.title.y = element_text(size=8, family = "sans", face = "bold"),
+#         axis.title.x = element_text(size=8, family = "sans", face = "bold"),
+#         axis.text.y = element_text(size=6, family = "sans"),
+#         axis.text.x  = element_text(size=6, family = "sans"),
+#         plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
+#         legend.position = "none",
+#         panel.background = element_rect(fill = "transparent"),
+#         plot.background = element_rect(fill = "transparent", color = NA)) +
+#   ylab("Y (m)") +
+#   xlab("X (m)")
+# 
+# 
 
 #----------------------------------------------------------------------
 # Example of the results for a single run

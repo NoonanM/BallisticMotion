@@ -1,3 +1,5 @@
+setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion")
+
 #Load in the requisite packages
 library(nlme)
 library(MuMIn)
@@ -10,11 +12,18 @@ library(gridExtra)
 library(rphylopic)
 library(sf)
 library(lwgeom)
+library(ape)
+library(phytools)
+library(raster)
+library(RStoolbox)
 
 #Import the data
 data <- read.csv("Results/lv_Results.csv")
 data <- data[-which(is.na(data$l_v)),]
+data$l_v <- as.numeric(data$l_v)
 TRAITS <- read.csv("~/Dropbox (Personal)/MultiSpecies_Data/Mammals/Species_Trait_Data.csv")
+TRAITS[which(TRAITS$BINOMIAL == "Erinaceus_europaeus"),"Group"] <- "H"
+TRAITS[which(TRAITS$BINOMIAL == "Ursus_americanus"),"Group"] <- "H" 
 RR <- read.csv("~/Dropbox (Smithsonian)/Allometric_Relationships/Scaling_of_Bias/Mammals/Bias_Scaling_Mammals/Results/HR_Results_NEW_DATA2.csv")
 RR <- RR[,c(1,2,4,5,9)]
 data <- merge(data, RR, all.x = TRUE)
@@ -27,14 +36,36 @@ names(TRAITS)[4] <- "label"
 traits <- read.csv("Data/Species_Trait_Data.csv")
 names(traits)[1] <- "label"
 
-
+data <- data[-which(data$binomial == "Canis_lupus_familiaris"),]
+data <- data[-which(data$binomial == "Ateles_geoffroyi"),] # Temporary until it runs correctly
+data <- data[-which(data$binomial == "Nasua_narica_2"),] # Temporary until it runs correctly
+data <- data[-which(data$binomial == "Nasua_narica"),] # Temporary until it runs correctly
+data <- data[-which(data$binomial == "Lepus_europaeus"),] # Only one OUF model
+data <- data[-which(data$binomial == "Lepus_timidus"),] # Only one OUF model and looks terrible
+data <- data[-which(data$binomial == "Procapra_gutturosa"),] # Outlier 
+data <- data[-which(data$ID == "LR05"),] #LR05 
+#data <- data[-which(data$ID == "Greg 4689"),] #Inez 5213
 
 #Pull in the phylopics from the web (All are creative commons licensed)
 wolf <- image_data("8cad2b22-30d3-4cbd-86a3-a6d2d004b201", size = 256)[[1]]
 hare <- image_data("f69eb95b-3d0d-491d-9a7f-acddd419afed", size = 256)[[1]]
 grass <- image_data("2af0a13e-69a8-4245-832e-ee3d981089b7", size = 256)[[1]]
 
+#----------------------------------------------------------------------
+# Annotate the individual datasets with mean NDVI 
+#----------------------------------------------------------------------
 
+#Import the NDVI rasters
+setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion/Data/NDVI")
+NDVI_files <- list.files(getwd(), pattern="TIFF$", full.names=FALSE)
+brk <- do.call(brick, lapply(NDVI_files, raster))
+
+#Mean NDVI
+NDVI <- mean(brk)
+NDVI <- rescaleImage(x= NDVI, xmin = 0, xmax = 255, ymin=-1, ymax=1) #rescale
+
+data$NDVI <- as.data.frame(extract(NDVI, SpatialPoints(cbind(data$Long, data$Lat)), sp = T))[,1]
+setwd("~/Dropbox (Personal)/UBC/Projects/BallisticMotion")
 
 
 #----------------------------------------------------------------------
@@ -52,29 +83,25 @@ phylogeny$tip.label[which(phylogeny$tip.label=="Equus_hemionus")] <- "Equus_hemi
 phylogeny$tip.label[which(phylogeny$tip.label=="Giraffa_camelopardalis")] <- "Giraffa_camelopardalis_reticulata"
 phylogeny$tip.label[which(phylogeny$tip.label=="Panthera_pardus")] <- "Panthera_pardus_pardus"
 phylogeny$tip.label[which(phylogeny$tip.label=="Elephas_maximus")] <- "Elephas_maximus_indicus"
+phylogeny$tip.label[which(phylogeny$tip.label=="Pseudalopex_culpaeus")] <- "Lycalopex_culpaeus"
+phylogeny$tip.label[which(phylogeny$tip.label=="Neovison_vison")] <- "Neogale_vison"
 
 #Add in the domestic dog with divergence time of 40,000 years
 node <- which(phylogeny$tip.label=="Canis_lupus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Canis_lupus_familiaris", 
                       where=node,
-                      edge.length=0.04)
+                      edge.length = 0.04,
+                      position = 0.04)
 
 #Add in the Persian leopard with divergence time of 0.297 Ma
 # Information on divergence time taken from https://doi.org/10.1046/j.0962-1083.2001.01350.x
 node <- which(phylogeny$tip.label=="Panthera_pardus_pardus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Panthera_pardus_saxicolor", 
-                      where=node,
-                      edge.length=0.297)
-
-#Add in the Sri Lankan Elephant with an estimated divergence time of 43,000 years
-# Information on divergence time taken from https://doi.org/10.1073/pnas.1720554115
-node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
-phylogeny <- bind.tip(phylogeny,
-                      tip.label="Elephas_maximus_maximus", 
-                      where=node,
-                      edge.length=0.043)
+                      where = node,
+                      edge.length = 0.297,
+                      position = 0.297)
 
 #Add in the Sumatran Elephant with divergence time of 190,000 years ago
 # Information on divergence time taken from https://doi.org/10.1073/pnas.1720554115
@@ -82,8 +109,17 @@ node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Elephas_maximus_sumatranus", 
                       where=node,
-                      edge.length=0.19)
+                      edge.length=0.19,
+                      position = 0.19)
 
+#Add in the Sri Lankan Elephant with an estimated divergence time of 43,000 years
+# Information on divergence time taken from https://doi.org/10.1073/pnas.1720554115
+node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
+phylogeny <- bind.tip(phylogeny,
+                      tip.label="Elephas_maximus_maximus", 
+                      where=node,
+                      edge.length=0.043,
+                      position = 0.043)
 
 #Add in elk with a divergence time from rangifer of 20 million years
 # Information on divergence time taken from https://doi.org/10.1016/j.ympev.2006.02.017
@@ -91,8 +127,17 @@ node <- which(phylogeny$tip.label=="Rangifer_tarandus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Cervus_canadensis", 
                       where=node,
-                      edge.length=22)
+                      edge.length=6.9,
+                      position=6.9)
 
+#Add in Rangifer tarandus tarandus with a divergence time from Rangifer tarandus of 115,000 years
+# Information on divergence time taken from https://doi.org/10.1111/j.0014-3820.2003.tb01557.x
+node <- which(phylogeny$tip.label=="Rangifer_tarandus")
+phylogeny <- bind.tip(phylogeny,
+                      tip.label="Rangifer_tarandus_tarandus", 
+                      where=node,
+                      edge.length=0.15,
+                      position = 0.15)
 
 #----------------------------------------------------------------------
 # Panel A Map of the tracking data
@@ -119,17 +164,23 @@ wintri_outline <-
   ) %>% 
   lwgeom::st_transform_proj(crs = crs_wintri)
 
-locations_pred <- data[which(data$Group == "C"),c("Long", "Lat")]
+locations_pred <- data[which(data$Diet == "C"),c("Long", "Lat")]
 locations_pred <- st_as_sf(locations_pred, coords = c("Long", "Lat"))
 st_crs(locations_pred) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 locations_pred <- lwgeom::st_transform_proj(locations_pred, crs = crs_wintri)
 st_crs(locations_pred) <- st_crs(world_wintri)
 
-locations_prey <- data[which(data$Group == "H"),c("Long", "Lat")]
+locations_prey <- data[which(data$Diet == "H"),c("Long", "Lat")]
 locations_prey <- st_as_sf(locations_prey, coords = c("Long", "Lat"))
 st_crs(locations_prey) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 locations_prey <- lwgeom::st_transform_proj(locations_prey, crs = crs_wintri)
 st_crs(locations_prey) <- st_crs(world_wintri)
+
+locations_omni <- data[which(data$Diet == "O" | data$Diet == "I"),c("Long", "Lat")]
+locations_omni <- st_as_sf(locations_omni, coords = c("Long", "Lat"))
+st_crs(locations_omni) <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+locations_omni <- lwgeom::st_transform_proj(locations_omni, crs = crs_wintri)
+st_crs(locations_omni) <- st_crs(world_wintri)
 
 a <- 
   ggplot() + 
@@ -138,9 +189,10 @@ a <-
   #geom_sf(data = grat_wintri, color = "gray30", size = 0.25/.pt) + 
   #geom_sf(data = wintri_outline, fill = NA, color = "#798E87", size = 0.5/.pt) +
   
-  geom_sf(data = world_wintri, fill = "#798E87", color = "#D5D5D3", size = 0.1/.pt, alpha = 0.9) + 
-  geom_sf(data = locations_pred, col = "#e6c141", size =  0.5/.pt) +
-  geom_sf(data = locations_prey, col = "#3471bc", size =  0.5/.pt) +
+  geom_sf(data = world_wintri, fill = "#798E87", color = "#D5D5D3", size = 0.1/.pt, alpha = 0.6) + 
+  geom_sf(data = locations_pred, col = "#e6c141", size =  0.1/.pt) +
+  geom_sf(data = locations_prey, col = "#3471bc", size =  0.1/.pt) +
+  geom_sf(data = locations_omni, col = "#3c7a47", size =  0.1/.pt) +
   
   coord_sf(datum = NA, expand = FALSE) +
   theme_bw() +
@@ -166,7 +218,7 @@ DATA <- aggregate(cbind(l_v)
                   ~ label, data = data, FUN = "mean")
 
 DATA$lv_sd <- aggregate(cbind(l_v)
-                  ~ label, data = data, FUN = "sd")[,2]
+                        ~ label, data = data, FUN = "sd")[,2]
 DATA$lv_sd[is.na(DATA$lv_sd)]<- 1 #Temporarily turn NAs into 1s
 
 #Subset to only the range resident individuals
@@ -175,10 +227,11 @@ DATA <- merge(DATA, TRAITS)
 
 #Remove duplicates
 DATA <- DATA[!duplicated(DATA$label),]
-DATA <- DATA[-which(DATA$label == "Lepus_timidus"),] #Drop a bad dataset
 N <- aggregate(cbind(l_v)
                ~ label, data = data, FUN = "length", na.action = na.omit)
 
+#Convert the 2 insectivores to omnivores
+DATA[which(DATA$Diet == "I"),"Diet"] <- "O"
 
 #person <- name_search(text = "pecari", options = "namebankID")[[1]]
 #name_images(uuid = person$uid[1])
@@ -211,10 +264,10 @@ N <- aggregate(cbind(l_v)
 
 
 b <-
-  ggplot(data=DATA, aes(x=reorder(label, l_v), y=l_v, fill = Group)) +
+  ggplot(data=DATA, aes(y=reorder(label, l_v), x=l_v, fill = Diet)) +
   ggtitle("B") +
-  geom_bar(stat="identity", col = "black", size = 0.1, width = 0.8) + coord_flip() +
-  scale_fill_manual(values = c("#e6c141","#3471bc")) +
+  geom_bar(stat="identity", col = "black", size = 0.1, width = 0.8) + #coord_flip() +
+  scale_fill_manual(values = c("#e6c141","#3471bc", "#3c7a47")) +
   theme_bw() +
   theme(panel.border = element_blank(),
         panel.grid.major = element_blank(),
@@ -222,32 +275,41 @@ b <-
         axis.line.x = element_line(size = 0.2),
         axis.ticks.x = element_line(size = 0.2),
         axis.ticks.y = element_blank(),
-        axis.ticks.length = unit(.1, "cm"),
+        #axis.ticks.length = unit(.1, "cm"),
         axis.title.y = element_blank(),
-        axis.title.x = element_text(size=10, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=8, family = "sans", face = "bold"),
         axis.text.y = element_blank(),
-        axis.text.x  = element_text(size=8, family = "sans"),
+        axis.text.x  = element_text(size=6, family = "sans"),
         plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
         legend.position = "none",
         panel.background = element_rect(fill = "transparent"),
         plot.background = element_rect(fill = "transparent", color = NA),
         #plot.margin = unit(c(0.4,0.1,0.4,0.2), "cm"))+
         plot.margin = unit(c(0.4,0.1,-0,-4.5), "cm")) +
-  #scale_y_continuous(limits = c(0,115), expand = c(0,0.1), breaks = c(0, 25, 50, 75, 100)) +
+  #scale_y_continuous(limits = c(0,1050), expand = c(0,0.1), breaks = c(0, 250, 500, 750, 1000)) +
+  scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
+                labels = c(0,0.1,1,10,100,1000,10000),
+                limits = c(1,1150)) +
+  annotation_logticks(sides="b",
+                      outside = TRUE,
+                      size = 0.3,
+                      short = unit(0.05, "cm"),
+                      mid = unit(0.05, "cm"),
+                      long = unit(0.1, "cm")) +
   #scale_x_discrete(expand = c(0,2)) +
-  ylab(expression(paste(l[v]," (m)"))) #+
-  #add_phylopic(pronghorn, x = 51.5, y = 107, ysize = 14, alpha = 1, col = "black") +
-  # add_phylopic(elephant, x = 48.5, y = 77, ysize = 18, alpha = 1, col = "black") +
-  # add_phylopic(maned_wolf, x = 45.5, y = 60, ysize = 14, alpha = 1) +
-  # add_phylopic(zebra, x = 42, y = 52, ysize = 14, alpha = 1) +
-  # add_phylopic(hyaena, x = 39, y = 42, ysize = 14, alpha = 1) +
-  # add_phylopic(bear, x = 35.5, y = 37, ysize = 14, alpha = 1) +
-  # add_phylopic(cervus, x = 32, y = 32, ysize = 13, alpha = 1) +
-  # add_phylopic(baboon, x = 28, y = 27, ysize = 14, alpha = 1) +
-  # add_phylopic(deer, x = 24.5, y = 24, ysize = 14, alpha = 1) +
-  # add_phylopic(jackal, x = 21, y = 21, ysize = 14, alpha = 1) +
-  # add_phylopic(impala, x = 18, y = 19, ysize = 14, alpha = 1) +
-  # add_phylopic(vervet, x = 15, y = 18, ysize = 14, alpha = 1) +
+  xlab(expression(bold(l[v]~(m)))) #+
+#add_phylopic(pronghorn, x = 51.5, y = 107, ysize = 14, alpha = 1, col = "black") +
+# add_phylopic(elephant, x = 48.5, y = 77, ysize = 18, alpha = 1, col = "black") +
+# add_phylopic(maned_wolf, x = 45.5, y = 60, ysize = 14, alpha = 1) +
+# add_phylopic(zebra, x = 42, y = 52, ysize = 14, alpha = 1) +
+# add_phylopic(hyaena, x = 39, y = 42, ysize = 14, alpha = 1) +
+# add_phylopic(bear, x = 35.5, y = 37, ysize = 14, alpha = 1) +
+# add_phylopic(cervus, x = 32, y = 32, ysize = 13, alpha = 1) +
+# add_phylopic(baboon, x = 28, y = 27, ysize = 14, alpha = 1) +
+# add_phylopic(deer, x = 24.5, y = 24, ysize = 14, alpha = 1) +
+# add_phylopic(jackal, x = 21, y = 21, ysize = 14, alpha = 1) +
+# add_phylopic(impala, x = 18, y = 19, ysize = 14, alpha = 1) +
+# add_phylopic(vervet, x = 15, y = 18, ysize = 14, alpha = 1) +
 # add_phylopic(crab_fox, x = 12, y = 16, ysize = 14, alpha = 1) +
 # add_phylopic(armadillo, x = 9, y = 14, ysize = 14, alpha = 1) +
 # add_phylopic(spider_monkey, x = 5.5, y = 12, ysize = 13, alpha = 1) +
@@ -272,7 +334,7 @@ TOP <-
 
 c <-
   ggplot(data=DATA) +
-  ggtitle("C") +
+  #ggtitle("C") +
   theme_bw() +
   
   add_phylopic(grass, alpha = 1, x = 0.05, y = 0.55, ysize = 0.201) +
@@ -334,24 +396,24 @@ c <-
 
 
 # Estimate the relationship between body mass and l_v for herbivores
-HERBS <- DATA[DATA$Group =="H",]
+HERBS <- DATA[DATA$Diet =="H",]
 '%ni%' <- Negate('%in%')
 herb <- drop.tip(phylogeny, c(which(phylogeny$tip.label %ni% HERBS$label)))
 row.names(HERBS) <-  HERBS$label
 HERBS <- HERBS[match(herb$tip.label, HERBS[,"label"]),]
 
 
-herb.mod <- gls(log10(l_v) ~ log10(Mass),
+herb.mod <- gls(log10(l_v) ~ log10(Mass), # + I(log10(Mass)^2),
                 cor=corGrafen(1,phy=herb),
                 data=HERBS)
 
 summary(herb.mod)
-
+confint(herb.mod)
 #Set up the model for plotting
 fit <- predict(herb.mod)
 
 V <- vcov(herb.mod)
-X <- model.matrix(~log10(Mass),data=HERBS)
+X <- model.matrix(~log10(Mass),data=HERBS)  #+ I(log10(Mass)^2)
 se.fit <- sqrt(diag(X %*% V %*% t(X)))
 se.fit.herb <- sqrt(diag(X %*% V %*% t(X))) #Second line repeats the first but stores the SEs with a different name for later use
 
@@ -363,7 +425,7 @@ herb.predframe <- with(HERBS,data.frame(Mass,
 
 # Estimate the relationship between body mass and l_v for carnivores
 
-CARN <- DATA[DATA$Group =="C",]
+CARN <- DATA[DATA$Diet =="C",]
 '%ni%' <- Negate('%in%')
 carn <- drop.tip(phylogeny, c(which(phylogeny$tip.label %ni% CARN$label)))
 row.names(CARN) <-  CARN$label
@@ -375,7 +437,7 @@ carn.mod <- gls(log10(l_v) ~ log10(Mass),
                 data=CARN)
 
 summary(carn.mod)
-
+confint(carn.mod)
 #Set it up for plotting
 fit <- predict(carn.mod)
 
@@ -389,21 +451,53 @@ carn.predframe <- with(CARN,data.frame(Mass,
                                        upr=10^(fit+1.96*se.fit)))
 
 
+
+
+# Estimate the relationship between body mass and l_v for omnivores
+
+OMNI <- DATA[DATA$Diet =="O",]
+'%ni%' <- Negate('%in%')
+omni <- drop.tip(phylogeny, c(which(phylogeny$tip.label %ni% OMNI$label)))
+row.names(OMNI) <-  OMNI$label
+OMNI <- OMNI[match(omni$tip.label, OMNI[,"label"]),]
+
+
+omni.mod <- gls(log10(l_v) ~ log10(Mass),
+                cor=corGrafen(0.9,phy=omni),
+                data=OMNI)
+
+summary(omni.mod)
+confint(omni.mod)
+#Set it up for plotting
+fit <- predict(omni.mod)
+
+V <- vcov(omni.mod)
+X <- model.matrix(~log10(Mass),data=OMNI)
+se.fit <- sqrt(diag(X %*% V %*% t(X)))
+
+omni.predframe <- with(OMNI,data.frame(Mass,
+                                       l_v=10^fit,
+                                       lwr=10^(fit-1.96*(se.fit)),
+                                       upr=10^(fit+1.96*se.fit)))
+
 d <- 
   ggplot(data=DATA, aes(x=Mass/1000, y=l_v)) +
-  ggtitle("D") +
+  ggtitle("C") +
   #geom_point(aes(color = Group), size = 0.5) +
-  geom_point(aes(x=Mass/1000, y=l_v, col = Group), size = 1, alpha = 0.7,stroke = 0,shape=16) +
-  geom_segment(aes(x=Mass/1000, xend=Mass/1000,
-                   y=l_v - (lv_sd*1.96),
-                   yend=l_v + (lv_sd*1.96), col = Group),
-               alpha = 0.5,
-               size = 0.2) +
   geom_line(data=carn.predframe, color = "#e6c141") +
   geom_line(data=herb.predframe, color = "#3471bc") +
+  geom_line(data=omni.predframe, color = "#3c7a47") +
+  
+  geom_point(aes(x=Mass/1000, y=l_v, col = Diet), size = 1, alpha = 0.7,stroke = 0,shape=16) +
+  # geom_segment(aes(x=Mass/1000, xend=Mass/1000,
+  #                  y=l_v - (lv_sd*1.96),
+  #                  yend=l_v + (lv_sd*1.96), col = Group),
+  #              alpha = 0.5,
+  #              size = 0.2) +
+  
   #geom_ribbon(data=carn.predframe,aes(ymin=lwr,ymax=upr), fill = "#e6c141", alpha=0.3) +
   #geom_ribbon(data=herb.predframe,aes(ymin=lwr,ymax=upr), fill = "#3471bc", alpha=0.3) +
-  scale_color_manual(values = c("#e6c141","#3471bc")) +
+  scale_color_manual(values = c("#e6c141","#3471bc", "#3c7a47")) +
   ylab("Ballistic length scale (m)") +
   xlab("Body mass (kg)") +
   
@@ -422,17 +516,17 @@ d <-
   
   scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
-                expand = c(0,0),
-                limits = c(1,4500)) +
+                expand = c(0,0)) +
   scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
-                labels = c(0,0.1,1,10,100,1000,10000),
-                limits = c(0.5,1500)) +
+                labels = c(0,0.1,1,10,100,1000,10000)) +
   annotation_logticks(outside = TRUE,
                       size = 0.3,
                       short = unit(0.05, "cm"),
                       mid = unit(0.05, "cm"),
                       long = unit(0.1, "cm")) +
-  coord_cartesian(clip = "off")
+  coord_cartesian(clip = "off",
+                  ylim = c(5,1200),
+                  xlim = c(0.2,5000))
 
 
 
@@ -496,20 +590,22 @@ ratios <- rbind(pred, prey)
 
 #What's the slope?
 phylo <- drop.tip(phylogeny, c(which(phylogeny$tip.label %ni% ratios$label)))
-ratios <- ratios[match(phylo$tip.label, ratios[,"label"]),]
-ratios <- ratios[-which(ratios$label == "Lepus_timidus"),] #Drop a bad dataset
-
+#ratios <- ratios[match(phylo$tip.label, ratios[,"label"]),]
+ratios2 <- ratios[which(ratios$Mass.x < 3000000),] #Remove the elephants
+ratios3 <- ratios[which(ratios$Mass.x >= 3000000),] #Remove the elephants
 ratio.mod <- gls(log10(tau_ratio) ~ log10(Mass.x),
-                 cor=corGrafen(1,phy=phylo),
-                 data=ratios)
+                 #cor=corGrafen(1,phy=phylo),
+                 data=ratios2)
 
 
-summary(ratio.mod)
+mod <- summary(ratio.mod); mod
+confint(ratio.mod)
 
-
+exponent <-  as.numeric(round(mod$coefficients[2],2))
+scaling <-  as.numeric(round(10^mod$coefficients[1],2))
 
 INTERCEPT <- gls(log10(tau_ratio) ~ 1,
-                 cor=corGrafen(1,phy=phylo),
+                 #cor=corGrafen(1,phy=phylo),
                  data=ratios)
 
 
@@ -522,18 +618,25 @@ diff(c(AICc(ratio.mod), AICc(INTERCEPT)))
 
 e <- 
   ggplot() +
-  ggtitle("E") +
-  geom_hline(yintercept = median(ratios$tau_ratio), linetype = "dashed", colour = "grey30", size = 0.5, alpha = 0.7) +
-  geom_rect(aes(xmin = 1, xmax = Inf,
-                ymin = 10^confint(INTERCEPT)[1],
-                ymax = 10^confint(INTERCEPT)[2]),
-            alpha = 0.3,
-            fill = "grey80") +
+  ggtitle("D") +
+  geom_hline(yintercept = median(ratios2$tau_ratio), linetype = "dashed", colour = "grey30", size = 0.5, alpha = 0.7) +
+  # geom_rect(aes(xmin = 0.2, xmax = Inf,
+  #               ymin = 10^confint(INTERCEPT)[1],
+  #               ymax = 10^confint(INTERCEPT)[2]),
+  #           alpha = 0.3,
+  #           fill = "grey80") +
   
-  geom_point(data=ratios, aes(y=tau_ratio, x=Mass.x/1000), color = "black", fill = NA, alpha = 1, shape = 21, stroke = 0.2, size = 1) +
-  geom_point(data=ratios, aes(y=tau_ratio, x=Mass.x/1000), color = "#3c7a47", alpha = 0.8, stroke = 0, shape=16, size = 1) +
-  #ylab(expression(paste("Predator ", l[v], " : ", "Prey ", l[v]))) +
-  ylab("Predator:Prey") + 
+  geom_point(data=ratios2, aes(y=tau_ratio, x=Mass.x/1000), color = "black", fill = NA, alpha = 1, shape = 21, stroke = 0.2, size = 1) +
+  geom_point(data=ratios2, aes(y=tau_ratio, x=Mass.x/1000), color = "#3c7a47", alpha = 0.8, stroke = 0, shape=16, size = 1) +
+  geom_smooth(data=ratios2, aes(y=tau_ratio, x=Mass.x/1000), color = "#3c7a47", method = "lm", se = F, size = 0.5) +
+  
+  geom_point(data=ratios3, aes(y=tau_ratio, x=Mass.x/1000), color = "black", fill = NA, alpha = 1, shape = 21, stroke = 0.2, size = 1) +
+  geom_point(data=ratios3, aes(y=tau_ratio, x=Mass.x/1000), color = "grey70", alpha = 0.8, stroke = 0, shape=16, size = 1) +
+  
+  annotate("text", x = 2000, y = 100, label =  "y == 116.5~x^-0.32", parse=T, hjust = 1, size = 2) +
+  annotate("text", x = 2000, y = 50, label =  "n == 75", parse=T, hjust = 1, size = 2) +
+  ylab(expression(bold(paste("Predator ", l[v], " : ", "Prey ", l[v])))) +
+  #ylab("Predator:Prey") + 
   xlab("Body mass (kg)") +
   theme_bw() +
   theme(panel.grid.major = element_blank(),
@@ -551,10 +654,10 @@ e <-
   scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
                 expand = c(0,0),
-                limits = c(1,4500)) +
+                limits = c(0.2,5000)) +
   scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
                 labels = c(0,0.1,1,10,100,1000,10000),
-                limits = c(0.5,1500)) +
+                limits = c(0.5,180)) +
   annotation_logticks(outside = TRUE,
                       size = 0.3,
                       short = unit(0.05, "cm"),
@@ -567,7 +670,6 @@ BOT <-
   grid.arrange(c,d,e,
                ncol=3,
                nrow=1)
-
 
 FIG <-
   grid.arrange(TOP, BOT,
@@ -587,4 +689,116 @@ ggsave(FIG,
 
 
 
+#----------------------------------------------------------------------
+# Correlations with NDVI
+#----------------------------------------------------------------------
 
+
+#Add in the model residuals to remove the bodysize effect
+data$residuals <- NA
+
+#Prey residuals
+summary(herb.mod)
+data[which(data$Group == "H"),"residuals"] <- (data[which(data$Group == "H"),"l_v"]) - (0.8902131*data[which(data$Group == "H"),"Mass"]^0.4165118)
+
+#Predator residuals
+summary(carn.mod)
+data[which(data$Group == "C"),"residuals"] <- (data[which(data$Group == "C"),"l_v"]) - (1.08305*data[which(data$Group == "C"),"Mass"]^0.5488005)
+
+data <- data[-which(data$l_v == 0),]
+
+plot(data$residuals ~ data$NDVI)
+abline(lm(data$residuals ~ data$NDVI))
+summary(lm(data$residuals ~ data$NDVI))
+
+#R^2 for pred and prey
+summary(lm(residuals ~ NDVI, data = data[which(data$Group == "H"),]))
+summary(lm(residuals ~ NDVI, data = data[which(data$Group == "C"),]))
+
+#AICc
+MuMIn::AICc(lm(residuals ~ NDVI, data = data[which(data$Group == "H"),]),
+            lm(residuals ~ 1, data = data[which(data$Group == "H"),]))
+
+MuMIn::AICc(lm(residuals ~ NDVI, data = data[which(data$Group == "C"),]),
+            lm(residuals ~ 1, data = data[which(data$Group == "C"),]))
+
+NDVI_FIG <- 
+ggplot(data=data, aes(x=NDVI, y=residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey30", size = 0.5, alpha = 0.7) +
+  geom_point(aes(x=NDVI, y=residuals, col = Group), size = 1, alpha = 0.7,stroke = 0,shape=16) +
+  geom_smooth(aes(x=NDVI, y=residuals, col = Group),  method = "lm", se = F, size = 0.5) +
+  
+  scale_color_manual(values = c("#e6c141","#3471bc")) +
+  #ylab("Body size residuals (m)") +
+  ylab(expression(bold(l[v]~body~mass~residuals~(m))))+
+  xlab("NDVI") +
+  
+  annotate("text", x = 0.85, y = 1750, label =  "y == -202.6~x~+~21.4", parse=T, hjust = 1, size = 2) +
+  annotate("text", x = 0.85, y = 1600, label =  "P < 2~x~10^-16", parse=T, hjust = 1, size = 2) +
+  annotate("text", x = 0.85, y = 1450, label =  "n == 1134", parse=T, hjust = 1, size = 2) +
+  
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(size=10, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=10, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=8, family = "sans"),
+        axis.text.x  = element_text(size=8, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
+        legend.position = "none",
+        panel.background = element_rect(fill = "transparent"),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        plot.margin = unit(c(0.2,0.1,0.2,0.2), "cm")) +
+  scale_y_continuous(breaks = c(-500, 0, 500, 1000, 1500, 2000))
+
+
+#Save the figures
+ggsave(NDVI_FIG,
+       width = 3.23, height = 3, units = "in",
+       dpi = 600,
+       bg = "transparent",
+       file="Results/NDVI_Figure.png")
+
+
+
+
+
+#----------------------------------------------------------------------
+# Scaling of prey size
+#----------------------------------------------------------------------
+
+
+#e <- 
+  ggplot() +
+  #ggtitle("D") +
+  #geom_hline(yintercept = median(ratios2$tau_ratio), linetype = "dashed", colour = "grey30", size = 0.5, alpha = 0.7) +
+  
+  geom_point(data=TRAITS, aes(y=Predator_Mass, x=Mass/1000), color = "#3471bc", size = 1, alpha = 0.7,stroke = 0,shape=16) +
+  geom_point(data=TRAITS, aes(y=Mass/1000, x=Prey_Mass), color = "#e6c141", size = 1, alpha = 0.7,stroke = 0,shape=16) +
+  ylab("Predator mass (kg)") +
+  xlab("Prey mass (kg)") +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.y = element_text(size=6, family = "sans", face = "bold"),
+        axis.title.x = element_text(size=6, family = "sans", face = "bold"),
+        axis.text.y = element_text(size=4, family = "sans"),
+        axis.text.x  = element_text(size=4, family = "sans"),
+        plot.title = element_text(hjust = -0.05, size = 12, family = "sans", face = "bold"),
+        legend.position = "none",
+        panel.background = element_rect(fill = "transparent"),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        plot.margin = unit(c(0.2,0.1,0.2,0.2), "cm")) +
+  
+  scale_x_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
+                labels = c(0.01,0.1,1,10,100,1000,10000),
+                expand = c(0,0),
+                limits = c(0.01,5000)) +
+  scale_y_log10(breaks = c(0.01,0.1,1,10,100,1000,10000),
+                labels = c(0,0.1,1,10,100,1000,10000)) +
+  annotation_logticks(outside = TRUE,
+                      size = 0.3,
+                      short = unit(0.05, "cm"),
+                      mid = unit(0.05, "cm"),
+                      long = unit(0.1, "cm")) +
+  coord_cartesian(clip = "off")

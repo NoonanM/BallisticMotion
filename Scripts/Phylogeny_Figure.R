@@ -38,7 +38,7 @@ phylogeny <- ls.consensus(TREES)
 #Starting tree
 plot(phylogeny, cex = 0.5)
 axisPhylo()
-nodelabels(phylogeny$node.label, cex = 0.5)
+nodelabels(phylogeny$node.label, cex = 0.4)
 
 #Identify missing species
 TRAITS$animal[!TRAITS$animal %in% phylogeny$tip.label] 
@@ -48,13 +48,16 @@ phylogeny$tip.label[which(phylogeny$tip.label=="Equus_hemionus")] <- "Equus_hemi
 phylogeny$tip.label[which(phylogeny$tip.label=="Giraffa_camelopardalis")] <- "Giraffa_camelopardalis_reticulata"
 phylogeny$tip.label[which(phylogeny$tip.label=="Panthera_pardus")] <- "Panthera_pardus_pardus"
 phylogeny$tip.label[which(phylogeny$tip.label=="Elephas_maximus")] <- "Elephas_maximus_indicus"
+phylogeny$tip.label[which(phylogeny$tip.label=="Pseudalopex_culpaeus")] <- "Lycalopex_culpaeus"
+phylogeny$tip.label[which(phylogeny$tip.label=="Neovison_vison")] <- "Neogale_vison"
 
 #Add in the domestic dog with divergence time of 40,000 years
 node <- which(phylogeny$tip.label=="Canis_lupus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Canis_lupus_familiaris", 
                       where=node,
-                      edge.length=0.04)
+                      edge.length = 0.04,
+                      position = 0.04)
 
 #check it inserted correctly
 plot(phylogeny, cex = 0.5)
@@ -65,20 +68,9 @@ axisPhylo()
 node <- which(phylogeny$tip.label=="Panthera_pardus_pardus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Panthera_pardus_saxicolor", 
-                      where=node,
-                      edge.length=0.297)
-
-#check it inserted correctly
-plot(phylogeny, cex = 0.5)
-axisPhylo()
-
-#Add in the Sri Lankan Elephant with an estimated divergence time of 43,000 years
-# Information on divergence time taken from https://doi.org/10.1073/pnas.1720554115
-node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
-phylogeny <- bind.tip(phylogeny,
-                      tip.label="Elephas_maximus_maximus", 
-                      where=node,
-                      edge.length=0.043)
+                      where = node,
+                      edge.length = 0.297,
+                      position = 0.297)
 
 #check it inserted correctly
 plot(phylogeny, cex = 0.5)
@@ -90,8 +82,20 @@ node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Elephas_maximus_sumatranus", 
                       where=node,
-                      edge.length=0.19)
+                      edge.length=0.19,
+                      position = 0.19)
+#check it inserted correctly
+plot(phylogeny, cex = 0.5)
+axisPhylo()
 
+#Add in the Sri Lankan Elephant with an estimated divergence time of 43,000 years
+# Information on divergence time taken from https://doi.org/10.1073/pnas.1720554115
+node <- which(phylogeny$tip.label=="Elephas_maximus_indicus")
+phylogeny <- bind.tip(phylogeny,
+                      tip.label="Elephas_maximus_maximus", 
+                      where=node,
+                      edge.length=0.043,
+                      position = 0.043)
 
 #check it inserted correctly
 plot(phylogeny, cex = 0.5)
@@ -104,13 +108,26 @@ node <- which(phylogeny$tip.label=="Rangifer_tarandus")
 phylogeny <- bind.tip(phylogeny,
                       tip.label="Cervus_canadensis", 
                       where=node,
-                      edge.length=22)
+                      edge.length=6.9,
+                      position=6.9)
 
 
 #check it inserted correctly
 plot(phylogeny, cex = 0.5)
 axisPhylo()
 
+#Add in Rangifer tarandus tarandus with a divergence time from Rangifer tarandus of 115,000 years
+# Information on divergence time taken from https://doi.org/10.1111/j.0014-3820.2003.tb01557.x
+node <- which(phylogeny$tip.label=="Rangifer_tarandus")
+phylogeny <- bind.tip(phylogeny,
+                      tip.label="Rangifer_tarandus_tarandus", 
+                      where=node,
+                      edge.length=0.15,
+                      position = 0.15)
+
+#check it inserted correctly
+plot(phylogeny, cex = 0.5)
+axisPhylo()
 
 #Which species are missing
 TRAITS$label[!TRAITS$label %in% phylogeny$tip.label]
@@ -178,9 +195,8 @@ DATA <- DATA[match(tree$tip.label, DATA[,"label"]),]
 
 
 
-
 #Fit the models to ballistic length scales
-l_v <- log(DATA$l_v)
+l_v <- log10(DATA$l_v)
 names(l_v) <- DATA$label
 
 #Calculate variogram
@@ -196,16 +212,19 @@ OU_FIT <- ctpm.fit(l_v, tree, model = "OU")
 BM_FIT <- ctpm.fit(l_v, tree, model = "BM")
 
 png(filename="Results/Ballistic_Motion_SVF.png",
-    width = 6.86, height = 4, units = "in",
+    width = 6.86, height = 6, units = "in",
     res = 600)
 
-par(mar = c(4.2, #bottom
+par(mfrow = c(2,1),
+    mar = c(4.2, #bottom
             4, #left
             1, #top
             1), #right
     font = 2)
 
 #Plot the variogram and fitted model
-plot(SVF, IID_FIT, ylim = c(0,20), cex = 0.5)
+plot(SVF, cex = 0.5, frac = 0.1, ylim = c(0,1))
+
+plot(SVF, cex = 0.5, frac = 1, ylim = c(0,40))
 
 dev.off()

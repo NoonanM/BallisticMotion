@@ -18,6 +18,7 @@
 \usepackage{url} % for easy url hyperlinks
 \usepackage{amsmath,amssymb}
 
+
 \DeclareMathOperator{\E}{\mathbb{E}}
 
 % The preamble here sets up a lot of new/revised commands and
@@ -45,7 +46,7 @@
 
 % Include your paper's title here
 
-\title{Non-linear dynamics drive a mass invariant evolutionary stable strategy in predator-prey systems} 
+\title{The search behaviour of terrestrial mammals}
 
 
 % Place the author information here.  Please hand-code the contact
@@ -61,18 +62,19 @@
 \affil[2]{\small ICTP South American Institute for Fundamental Research \& Instituto de Física Teórica, Universidade Estadual Paulista - UNESP, Rua Dr. Bento Teobaldo Ferraz 271, Bloco 2 - Barra Funda, 01140-070 São Paulo, SP, Brazil}
 
 \author[3,4]{C. H. Fleming}
-\affil[3]{\small University of Maryland College Park, College Park, MD, USA}
+\affil[3]{Department of Biology, University of Maryland, College Park, MD, USA}
 \affil[4]{\small Smithsonian Conservation Biology Institute, Front Royal, VA, USA}
 
 \author[2]{Benjamin Garcia De Figueiredo}
-\affil[2]{\small ICTP South American Institute for Fundamental Research \& Instituto de Física Teórica, Universidade Estadual Paulista - UNESP, Rua Dr. Bento Teobaldo Ferraz 271, Bloco 2 - Barra Funda, 01140-070 São Paulo, SP, Brazil}
 
 \author[]{DATA PROVIDERS}
 
-\author[5,6,7]{Justin M. Calabrese}
+\author[3]{William F. Fagan}
+
+\author[5,6,3]{Justin M. Calabrese}
 \affil[5]{Center for Advanced Systems Understanding (CASUS), Görlitz, Germany}
 \affil[6]{Helmholtz-Zentrum Dresden-Rossendorf (HZDR), Dresden, Germany}
-\affil[7]{Department of Biology, University of Maryland, College Park, MD, USA}
+
 
 %\author
 %{Michael J. Noonan,$^{1\ast}$, Ricardo Martinez-Garcia,$^{2 \ast}$ Christen H. Fleming,$^{1,2}$, DATA PROVIDERS, Justin M. Calabrese$^{1,2}$\\
@@ -83,7 +85,7 @@
 %\normalsize{1500 Remount Rd., Front Royal, VA 22630, USA}\\
 %\normalsize{$^{4}$Department of Biology, University of Maryland, College Park, MD 20742, USA}\\
 %\\
-%\normalsize{$^\ast$To whom correspondence should be addressed; E-mail:  NoonanM@si.edu.}
+%\normalsize{$^\ast$To whom correspondence should be addressed; E-mail:  michael.noonan@ubc.ca.}
 %}
 
 % Include the date command, but leave its argument blank.
@@ -111,7 +113,7 @@
 % Place your abstract within the special {sciabstract} environment.
 
 \begin{sciabstract}
-Abstract goes here.
+Animals searching landscapes need to strike a balance between finding sufficient resources, while also minimizing encounter with predators. A key determinant of encounter rates is the average length scale over which ballistic motion is maintained, with ballistic movement leading to higher encounter rates than more diffusive movement. Using GPS data from 53 species, we show how the optimization of search strategies underpins broad patterns in the movement terrestrial mammals. Ballistic length scales increase with body size, but predators maintained $\sim$250m longer ballistic length scales than similarly sized prey. These patterns emerge from a combination of bottom-up and top-down pressures, with individual deviations from the body-mass predictions being modulated by resource abundance. Our findings highlight the importance of encounter rates as a primary driver of mammalian movement.%The abstract should be 125 words or less.
 \end{sciabstract}
 
 
@@ -126,74 +128,53 @@ Abstract goes here.
 % choice.  Either way, use the asterisk (*) modifier, as shown, to
 % suppress numbering.
 
-\section*{Introduction}
-
-%The metabolic theory of ecology \cite{Kleiber:1947,West:1997, McNab:2002wf, Brown:2004} suggests that body mass is a `super trait' that governs most observed biological patterns from the scale of the individual to the ecosystem \cite{Enquist:2003}. This theory has led to the formulation of numerous body size scaling rules. Prime among these is the relationship between body mass and animal space use, an allometry that has guided ecological theory for more than 50 years \cite{McNab:1963,CalderIII:1983bh,Grant:1992kn,Jetz:2004er,Tamburello:2015}. Assuming that energetic requirements are determined by the whole-organism field metabolic rate \cite{Kleiber:1947}, home range area, $H$, should scale positively with body mass, $M$, as $H = B_{0}M^b$, where $B_{0}$ is a normalization constant and $b$ the scaling exponent \cite{McNab:1963}. However, despite decades of research focused on identifying the scaling exponent of this relationship \cite{McNab:1963, CalderIII:1983bh, Grant:1992kn,Kelt:2001,Jetz:2004er,Tucker:2014,Tamburello:2015}, there has been no attention on how movement within home range areas scales across taxa.
-
-%The metabolic theory of ecology suggests that body mass is a `super trait' that governs most observed biological patterns from the scale of the individual to the ecosystem \cite{Kleiber:1947,West:1997, McNab:2002wf, Enquist:2003,Brown:2004}. Assuming that energetic requirements are determined by the whole-organism field metabolic rate \cite{Kleiber:1947}, and that one of the principal reasons why animals move is to increase the rate at which food is encountered \cite{Charnov:1976wz,Rosenzweig:1981,Turchin:2003,DeKnegt:2007bg,Barraquand:2013}, the expectation is that home range area should scale positively with body mass. Indeed, the positive allometry between home-range area and body mass has received unequivocal support from more than 50 years of research into animal movement \cite{McNab:1963,CalderIII:1983bh,Jetz:2004er,Tamburello:2015,Noonan:2020}. However, what is less understood is how predator-prey dynamics play out across the mass spectrum. Unsurprisingly, more than 50 years of research have demonstrated the animal movement and space use are strongly tied to body size \cite{McNab:1963,CalderIII:1983bh,Grant:1992kn,Jetz:2004er,Visser:2006,Tamburello:2015,Hirt:2017}. 
-
-For motile species, movement represents a key mechanistic link between individual behaviour and higher-level ecological processes \cite{Holling:1959,Kareiva:1987,Huston:1988,Turchin:1998td,Barraquand:2013,Spiegel:2017be,Dougherty:2018}. Because of the evolutionary significance of optimal foraging theory \cite{Charnov:1976wz,Pyke:1984,DeKnegt:2007bg,Fagan:2013gx} and predator-prey dynamics \cite{Volterra:1928,Elton:1942,Mitchell:2002en,Fortin:2005fj,Barraquand:2013}, there should be strong selection pressure on any movement strategies that optimize encounter rates. In this respect, directed (i.e., ballistic) movement leads to higher encounter rates, whereas more tortuous (i.e., diffusive) movement tends to decrease encounter rates \cite{Gerritsen:1977,Visser:2006,Hutchinson:2007,Bartumeus:2008,Gurarie:2011ic}. Therefore, to maximize the rate at which prey are encountered, predatory species should be expected to exhibit more ballistic motion than their prey species. Conversely, for herbivores feeding on immobile, widely available vegetation, mortality due to predation is a major evolutionary force \cite{McNaughton:1986, Reale:2003, Sinclair:2003}. Compared to predatory species therefore, we would expect herbivorous prey species to maintain relatively diffusive movement in order to minimize the rate at which they encounter potential predators. Although the importance of ballistic motion in determining encounter rates is well recognized \cite{Visser:2006, Bartumeus:2008, Barraquand:2013, Gurarie:2013}, a generalized understanding of how this scales across taxa is lacking. 
+%\section*{Introduction}
 
 
-The primary reason for this is that encounter processes have been analysed mostly through simulations \cite{Bartumeus:2002,Bartumeus:2008,Gurarie:2013,Bartumeus:2014}, with models that are not often representative of real animal movement \cite{Martinez:2020}, and, more importantly, do not consider energetic constraints on individual movement strategies \cite{Kram:1990eu}. In addition to theoretical limitations, the average length scale over which ballistic motion is maintained ($l_v$, in m) is a function of the spatial variance of an animal's movement process ($\sigma_p$, in m$^2$) and its positional and velocity autocorrelation timescales ($\tau_p$ and $\tau_v$ respectively, in sec), given by
+\noindent As motile organisms move through landscapes in search of food and mates, they need to strike a balance between finding sufficient resources to grow and reproduce, while also minimizing the rate at which they encounter predators \cite{Milinski:1978,Visser:2006}. Because of the fitness consequences of foraging success \cite{Charnov:1976wz, Lemon:1991} and predator-prey dynamics \cite{Volterra:1928,May:1972,Fryxell:2007}, there should be strong selection pressure on movement strategies that optimize encounter rates. Although the exact movement processes that searching animals might take has been debated \cite{Viswanathan:1999,Edwards:2007,Sims:2008,Martinez:2020}, the general consensus is that ballistic (i.e., directed) movement leads to higher encounter rates than more diffusive (i.e., tortuous) movement \cite{Viswanathan:1999,Visser:2006,Edwards:2007,Hutchinson:2007,Bartumeus:2008,Sims:2008}. This occurs because individuals that exhibit diffusive movement will tend to repeatedly search over the same areas, whereas ballistic motion allows individuals to search over a larger area within the same amount of time. The average length scale over which ballistic motion is maintained, $l_v$ (in m), is thus a key determinant of encounter rates \cite{Visser:2006, Tejedor:2012} and a potent trait on which natural selection may act.
+
+Because ballistic movement is the more efficient search strategy, bottom-up pressure exerted by food needs will select for longer ballistic length scales. Importantly, however, increasing $l_v$ will also increase the rate at which individuals encounter predators \cite{Milinski:1978,Visser:2006}. Top-down predation pressure thus selects for shorter ballistic length scales. Prey species searching for immobile vegetation must therefore optimize their movement against the opposing forces of their energetic requirements selecting for longer $l_v$, and predation pressure selecting for shorter $l_v$ \cite{Visser:2006}. Predatory species, in contrast, also benefit from maintaining longer ballistic length scales \cite{Visser:2006}, but without the top-down predation pressure experienced by prey species. The combination of bottom-up and top-down regulation is thus expected to select for longer ballistic length scales in predators, versus relatively more diffusive movement in prey species, all else being equal \cite{Visser:2006} (Fig.~\ref{fig:theory}). 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=1]{Diagram_V2.png}
+\caption{\textbf{Selection pressures on predator and prey ballistic length scales.} Schematic representation of bottom-up energetic requirements selecting for longer $l_v$, and top-down predation pressure selecting for shorter $l_v$.}
+\label{fig:theory}
+\end{figure}
+
+Notably, `all else' is rarely equal in ecological systems, and the relative importance of bottom-up versus top-down regulation is highly context specific. In resource poor ecosystems, individuals need to spend a significant amount of time searching for food \cite{White:1978,Viswanathan:1999,Paiva:2010}. Because starvation is often a greater source of mortality than predation \cite{Mduma:1999}, the bottom-up driven need to find sufficient resources to survive should outweigh top-down pressure when resources are scarce. In productive environments, in contrast, bottom-up pressure on resource acquisition rates should be relaxed \cite{Charnov:1976wz,Viswanathan:1999,Dickie:2022}, allowing individuals to respond more directly to top-down pressure and maintain relatively more diffusive movement. These considerations lead to the expectation of a negative relationship between $l_v$ and environmental productivity.
+
+Although the importance of $l_v$ in governing encounter rates is well recognised from a theoretical standpoint \cite{Bartumeus:2002,Visser:2006,Bartumeus:2008,Tejedor:2012}, a generalized understanding of how bottom-up (i.e., resource availability) and top-down (predation pressure) factors shape general patterns in mammalian search strategies is lacking. The primary reason for this is that movement data have, historically, been sampled at too coarse of a resolution to quantify the average length scale over which ballistic motion is maintained for a broad range of species \cite{Kays:2015en}. To see this, consider that $l_v$ is a function of the spatial variance of an animal's movement process ($\sigma_p$, in m$^2$, proportional to the home-range area) and its positional and velocity autocorrelation timescales ($\tau_p$ and $\tau_v$ respectively, in sec), given by
 \begin{equation}
 l_v = \sqrt{\frac{\tau_v}{\tau_p}\sigma_p}.
 \label{eq:lv}
 \end{equation}
-Although $\sigma_p$ can be well estimated from coarse data \cite{Fleming:2014gd, Fleming:2014jr, pREML, AKDEvsKDE}, autocorrelation structures are only revealed when the time scale of measurement is $\leq$ than the autocorrelation timescales \cite{Fleming:2014jr,Gurarie:2017fo,Speed}. In particular, $\tau_v$ tends to be on the order of minutes to hours for most terrestrial mammals \cite{Fleming:2014jr,Gurarie:2017fo,Morato:2016ioa,Farhadinia:2018}, whereas animal tracking data have, historically, been sampled on the order of days. The rapid development of tracking technologies in recent years \cite{Kays:2015en,Hofman:2019,Nathan:2022}, have moved sampling frequencies into a regime where $l_v$ can now be estimated for a broad range of species \cite{AKDEvsKDE}. Here, we demonstrate the non-linear dynamics in both the metabolic costs of movement and encounter rates. We then use stochastic simulations to predict how these theoretical relationships conspire to shape the evolution of predators and prey movement across the mass spectrum. We then confirm these theoretical predictions using Global Positioning System (GPS) location data on 595 individuals from 53 species of terrestrial mammals.
+While $\sigma_p$ can be well estimated from coarse data \cite{AKDEvsKDE}, autocorrelation structures are only revealed when the time scale of measurement is less than or equal to the autocorrelation timescales \cite{Noonan:2019}. In particular, $\tau_v$ tends to be on the order of minutes to hours for terrestrial mammals \cite{Morato:2016ioa,Noonan:2019,Medici:2022}. %As a result, ballistic length scales have only been explored in a small number of bacterial and planktonic species \cite{Visser:2006}.
 
-
-
-I THINK WE SHOULD OPEN UP WITH THE ANALYTICAL RESULTS HERE.
-
-
-These analytical results show how first encounter time and $l_v$ exhibit a saturating relationship. This suggest that, even without costs there is an upper limit to $l_v$ beyond which there are no benefits in terms of encounter rates.  In addition, there is a non-linear relationship between $l_v$ and movement speed such that energetic costs increase exponentially as $l_v \to 0$. The combination of the upper and lower contraints suggests that individuals should have an optimal value of $l_v$ around which natural selection should converge. As the selection for directional persistence in the movement of predators and prey is expected to act in opposite directions (i.e., more ballistic for predators, vs. more diffusive for prey), we used simulations to test whether there is any evidence for stabilizing selection in the ratio between predator and prey ballistic length scales, $l_v$. From these, we found that all of the predator-prey systems we simulated converged to an evolutionary stable ratio between predator and prey ballistic length scales (Fig.~\ref{fig:sim_res}E). In addition, although there was a strong positive allometry in $l_v$ for both predators and prey, all of the simulated predator-prey systems we tested converged to a mass-invariant ratio of 22.1 (95\% CI: 20.9 - 23.4; Fig.~\ref{fig:sim_res}B).
-
+Here, we leverage the rapid advances in the field of movement ecology \cite{Kays:2015en, Nathan:2022} that have enabled $l_v$ to be estimated for a broad range of species. We annotated Global Positioning System (GPS) location data on 963 individuals from 53 species of terrestrial mammals (Fig.~\ref{fig:emp_res}A) with mean adult body size (ranging from 0.4 to 4,000 kg), trophic group (herbivorous/frugivorous {\it n = 33}, and carnivorous {\it n = 20}). We restricted our analyses to range-resident animals and used continuous-time stochastic processes \cite{Calabrese:2016ey} to estimate $l_v$ for each individual (Fig.~\ref{fig:emp_res}B). We also annotated each data point with the mean Normalized Difference Vegetation Index (NDVI), a satellite-derived measure of resource abundance \cite{Pettorelli:2011}, to which each individual was exposed. %Finally, we quantified the mean percent forest cover \cite{Tuanmu:2014} at each sampled location as a measure of habitat permeability.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.9]{lv_Scaling_Simulations.png}
-\caption{Results of our simulation study exploring the evolution of ballistic length scales, $l_v$ in predator-prey systems. Panel A shows the allometric relationship in $l_v$ for both predator (yellow) and prey (blue) species. Panel B shows how the resulting ratio of predator:prey ballistic length scales is mass invariant. The lower three panels depict the fitness C, movement paths D, and pairwise dynamics E for an a single predator-prey system with a predator of 40kg and a prey of ca. 14kg. Point sizes in A are proportional to the variance on the estimates.}
-\label{fig:sim_res}
+\includegraphics[scale=0.9]{Map.png}
+\caption{\textbf{The distribution of mammalian movement data.} In A, the GPS locations of 963 prey (blue) and predatory (yellow) mammals across 53 species are plotted on the global map; and B shows the median ballistic length scales, $l_v$, for each species.}
+\label{fig:map}
 \end{figure}
 
 
-We tested these predictions using GPS location data on 595 individuals from 53 species of terrestrial mammals (Fig.~\ref{fig:emp_res}A). We annotated the individual datasets with mean adult body size (ranging from 0.5 to 4,000 kg), dietary guild (i.e., herbivorous/frugivorous {\it n = }, and carnivorous/omnivorous {\it n = }), median prey mass for those species that consume mammalian prey, and the median mass of all known predators for each species. We restricted all of our analyses to range-resident animals, as evidenced by variogram analysis \cite{Fleming:2014jr}, and used continuous-time stochastic processes to estimate $l_v$ (Fig.~\ref{fig:emp_res}B), for each individual. We accounted for phylogenetic inertia by including the matrix of phylogenetic distances among species as a random effect in our regressions models.
-
-We found significant positive correlations between $l_v$ and mass for both herbivorous/frugivorous ($t = 5.05$, $p \textless 0.001$), and carnivorous/omnivorous mammals ($t = 3.49$, $p \textless 0.005$; Fig.~\ref{fig:emp_res}C). Carnivores also tended to exhibit more ballistic movement than comparably sized herbivores, with herbivore $l_v$ scaling with mass as
-\begin{equation}
-l_v = 0.05M^{0.60},
-\end{equation}
-versus carnivore $l_v$ scaling as
-\begin{equation}
-l_v = 0.22M^{0.66}.
-\end{equation}
-
+These analyses revealed allometric scaling in both predator and prey ballistic length scales, with larger mammals tending to have longer $l_v$, all else being equal (Fig.~\ref{fig:emp_res}A). The body mass residuals followed theoretical predictions, with predator $l_v$ being approximately 260m longer than that of comparably sized prey species (Fig.~\ref{fig:emp_res}B). Least-squares regression also revealed a strong negative correlation between NDVI and the residuals of the allometric relationships in $l_v$ for predators and prey (Fig.~\ref{fig:emp_res}D). This was favoured over the null model of no relationship with NDVI by a $\Delta$AIC\textsubscript{c} of $>50$ for predators and a $\Delta$AIC\textsubscript{c} of $\sim900$ for prey. In other words, when resource abundance was ignored, predictions from the simple body-size relationships tended to underestimate observed $l_v$ in low-productivity ecosystems, and over-estimate $l_v$ in highly productive ecosystems. That bottom-up pressures appear to outweigh top-down pressure in resource scarce ecosystems is made all the more poignant when contrasted against patterns in trophic structure scaling. Resource poor environments tend to be more top heavy than productive ecosystems \cite{Hatton:2015}, effectively increasing individual level predation pressure.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=0.9]{Empirical_Figure.png}
-\caption{In A, the GPS relocations of X individuals across YY species plotted on the global map in Winkel Tripel projection; and B shows species median ballistic motion length scales, $l_v$. The lower two scatterplots depict D the allometric scaling of the ballistic length scale, $l_v$ for herbivorous/frugivorous (blue), as well as carnivorous/omnivorous (yellow) mammals; and E the lack of any allometry between the ratio of a predator's $l_v$ to their prey's $l_v$. The axes are log-scaled. The solid lines in D depict the phylogenetically controlled fitted regression models, and the dashed lines in E depict the median ratio.}
+\includegraphics[scale=0.9]{Empirical_Trends.png}
+\caption{\textbf{Trends in mammalian ballistic length scales.} Mammalian $l_v$ scales with body size, but predators exhibit more ballistic motion than prey species, and search behaviour is modulated by environmental productivity. The scatterplot in (\textbf{A}) show the allometric scaling of the ballistic length scale, $l_v$ for prey (blue), as well as predatory (yellow) mammals. The boxplots in (\textbf{B}) show the residuals of the body mass scaling of $l_v$ for predators and prey. When body size is accounted for, predatory species have significantly longer ballistic length scales on average ($P$ value $<10^{-15}$). The scatterplot in (\textbf{C}) show the body mass residuals as a function of the normalized difference vegetation index (NDVI), a measure of habitat productivity ranging on a scale between -1 and 1. The solid lines in C depict the fitted regression models.}
 \label{fig:emp_res}
 \end{figure}
 
+%Because predators need to encounter \emph{and} capture mobile prey, where predation rates depend on numerous factors beyond encounter rates, (e.g., capture efficiency, predator hunger levels at the time of the encounter, the presence of suitable cover, prey defenses, etc. \cite{Suraci:2022}), we would expect prey species to respond more directly to bottom-up factors than predators. In line with this expectation, NDVI tended to be a better predictor of prey $l_v$ residuals than predator $l_v$ residuals (adjusted R$^2$ = 0.37 versus 0.002, respectively).
 
-Interestingly, $l_v$ for both feeding guilds scaled with the ca. $\frac{2}{3}$ expected via Euclidean geometry as opposed to the $\frac{3}{4}$ expected under strictly metabolic scaling \cite{Brown:2004}. Although $\l_v$ scaled with mass across 5 orders of magnitude, the best fit models for the ratio between the $l_v$ of predators and their prey (Fig.~\ref{fig:emp_res}D), and between prey and their predators (Fig.~\ref{fig:emp_res}E), were intercept only models. We found that $l_v$ in predatory species tended to be $\sim$18-times longer than their prey. Prey species, in contrast, tended to have an $l_v$ that was $\sim$1/3 of their predators'. 
+An important question that arises from this work is `Why don't predators have longer ballistic length scales?'. Without top-down regulation, there should be nothing preventing runaway selection in predator $l_v$. Nonetheless, we found that predator $l_v$ was only $\sim$250m longer than that of comparably sized prey on average. There are three main reasons why predator ballistic length scales are not longer than we observed. The first is that individuals need to search over the area that they travel through and more directed motion does not necessarily imply an efficient search. Predators are thus limited by their perceptual range \cite{Visser:2006,Martinez:2020}. The second reason is that while many mammalian predators have few predators themselves, intra-guild and conspecific encounters can constrain predator movement \cite{Alonso:2002}. The third is that although local resource abundance will influence the relative importance of search times, it is not the only factor that will influence movement paths. Emerging empirical studies have found that the structure present in natural ecosystems can impact habitat permeability and the capacity for individuals to maintain directed motion \cite{Dickie:2017, Medici:2022}. We would therefore also expect to see a negative correlation between permeability and $l_v$. From our data, however, we found no support for a relationship between habitat structure and $l_v$ for predators nor prey (supplementary material). Nonetheless, it is still possible that anthropogenic activities that introduce linear features, such as roads and edges, can permit predators to maintain unnaturally directed motion, leading to unnaturally high predation pressure on prey species \cite{Dickie:2017}.
 
-%When simulating across potential $\tau_v$ ratios, we found that both the mean encounter rate, and mean number of encounters over the duration of the simulation exhibited saturating relationships when increasing a predator's $\tau_v$ for a fixed prey $\tau_v$ (Fig. \ref{fig:sim_res}). When compared to the empirically observed ration of $\sim$3.5, the simulations suggested that increasing $\tau_v$ any further would increase the encounter rate, but with diminishing returns. In contrast, if predator movement was any more diffusive than their prey's movement, their was a non-linear decrease in encounter rates. \todo{Double check numbers in this paragraph}\\
-
-
-\noindent THINGS TO TOUCH ON IN `DISCUSSION': 
-
- The $\frac{2}{3}$ scaling expected via Euclidean geometry as opposed to the $\frac{3}{4}$ expected via the metabolic theory of ecology is interesting. Suggests $l_v$ my be primarily a function of spacing patterns rather than energetic requirements.
-
-Although the movement of larger animals tends to be more ballistic than that of smaller animals, predator-prey movement is fixed across the mass spectrum
-
-Encounters can be increased in two ways, increasing speed, or increasing directional persistence. Increasing speed increases the energetic cost of movement, so there is a limit beyond which encounters must be optimized via $\tau_v$. All else being equal though, a change in $\tau_v$ means a change in $\tau_p$, so any behaviour related to $\tau_p$ must be factored in (e.g., territorial maintenance).
-
-Meso-carnivores also have to optimise encountering their prey versus encountering their predators. There is likely strong stabilising pressure on $\tau_v$ for these species.
-
-Prey can't modify their predator's movement to reduce encounters, but they can keep their own contribution down by maintaining more diffusive movement while going about their daily routines.
+Our findings highlight how the optimization of search strategies underpins broad patterns in the movement terrestrial mammals. Predatory species searching for mobile prey have to maintain more directed motion than similarly sized prey species searching for immobile vegetation, with strong allometric patterns in mammalian ballistic length scales. Individual deviations from these allometries were influenced primarily by resource abundance rather than habitat structure. This points to the importance of encounter rates as a primary driver of mammalian movement strategies.
 
 
 
@@ -202,11 +183,8 @@ Prey can't modify their predator's movement to reduce encounters, but they can k
 \bibliographystyle{Science}
 
 
-
-
-
 \section*{Acknowledgments}
-Include acknowledgments of funding, any patents pending, where raw data for the paper are deposited, etc.
+MJN was supported by an NSERC Discovery Grant RGPIN-2021-02758. This work was partially funded by the Center of Advanced Systems Understanding (CASUS) which is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget approved by the Saxon State Parliament. CHF and JMC were supported by NSF IIBR 1915347. The data and \texttt{R} scripts used to carry out this simulation study are openly available on GitHub at \url{https://github.com/NoonanM/BallisticMotion}.
 
 %Here you should list the contents of your Supplementary Materials -- below is an example. 
 %You should include a list of Supplementary figures, Tables, and any references that appear only in the SM. 
@@ -222,175 +200,6 @@ References \textit{(4-10)}
 
 \section*{Materials and Methods}
 
-% ----------------------------------------------------------------
-% Analytical work
-% ----------------------------------------------------------------
-
-\subsection*{Math}
-
-We analyzed the dependence of the mean first encounter time between and prey and its predator. We modeled both prey and predator movement using Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. The spatial variances and the positional autocorrelation timescales for each model where parameterized according to allometric relationship (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. We further parameterized the prey:predator body mass ration using the allometric relationship in (\ref{eq:bodymass-sc}).
-
-To obtain the meand first encounter time we simulated $10^5$ independent realizations of a prey-predator pair of OUF processes. In each OUF realization the initial location and velocity of each individual were sorted from their steady-state probability density functions \cite{Fleming:2014jr,Fleming:2014gd}. We ran the simulations using an Euler algorithm for stochastic differential equations with time step $dt=10^{-3}$ to integrate the pair of coupled SDEs that define the OUF process. We stopped each realization when distance between both trajectories was below an encounter distance $q=0.1$. Because our results do not depend qualitatively on the specific value of $q$ and on the distance between home-range centers, we choose these values to make encounters more frequent and thus reduce computation time. Our results show that the mean first encounter time increases monotonically with the average length scale over which prey maintain ballistic motion, $l_v$, regardless of the autocorrelation in the velocity of the predator. Therefore, prey fitness benefits related to more ballistic motion saturate are bounded.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.65\textwidth]{saturation.pdf}
-\caption{Mean first encounter time in a prey predator pair exhibiting OUF movement. Home-range sizes and the positional autocorrelation timescale were parameterized using the allometric scaling laws in (\ref{eq:prey-allo})-(\ref{eq:prey-allo-taup}) and (\ref{eq:predator-allo})-(\ref{eq:predator-allo-taup}) for the prey and the predator respectively. Predator body mass $m=10$\,Kg and prey mass was calculated using (\ref{eq:bodymass-sc}). The distance between home-range centers is $1$ (km??? NOT SURE IF THIS IS THE LENGTH SCALE IN THE SCALING LAWS // ALSO NOT SURE ABOUT THE UNITS OF THE MFET (DAYS, SECONDS, MIN...).}
-\label{fig:mfet-pairs}
-\end{figure}
-
-
-% ----------------------------------------------------------------
-% Simulation Study
-% ----------------------------------------------------------------
-
-\subsection*{Simulation Study}
-
-We used a series of stochastic simulations to explore how ballistic length scales, $l_v$, might be expected to evolve in predator prey systems across the body mass spectrum. In these simulations, predator and prey movement were free to evolve via natural selection based on a set of initial conditions and fitness functions. Details on these follow.
-
-% Prey movement
-\subsubsection*{Prey movement}
-
-Prey movement were simulated based on Ornstein-Uhlenbeck-Foraging (OUF) processes \cite{Fleming:2014jr,Fleming:2014gd} which feature a finite spatial variance, $\sigma_p$, correlated positions, $\tau_p$, and correlated velocities $\tau_v$. For the prey movement models, all initial parameter values were simulated based on established allometric relationships with prey mass estimated by Noonan et al. \cite{Noonan:2020}. The spatial variances were simulated as
-
-\begin{gather}\label{eq:prey-allo}
-\log_{10}(\mathrm{95\%~home~range}) = 0.5078955 + 1.372162 \log_{10}(\mathrm{mass}) \\
-%\mathrm{VAR}[\mathrm{position}] = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi}
-\sigma_p = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi},
-\end{gather}
-
-the positional autocorrelation timescales as
-
-\begin{gather}\label{eq:prey-allo-taup}
-\log_{10}(\E[\tau_\mathrm{position}]) = 1.2994292 + 0.8129125 \log_{10}(\mathrm{mass}).
-\end{gather}
-
-For the velocity autocorrelation timescales, we sampled all values between the 0 and $\tau_\mathrm{position}$. This parameterization was selected in order to ensure that the founding population exhibited a sufficiently broad range of initial $l_v$ values on which selection could act. In most real systems, home range size and range crossing times are likely to be highly, and inflexibly, correlated \cite{Noonan:2020}, whereas $\E[\tau_\mathrm{velocity}]$ is likely to be the more flexible parameter. This parameterization thus decreased computation time without compromising biologically realism.
-
-%\begin{gather}
-%\log_{10}(\E[\tau_\mathrm{velocity}]) = -1.365200 + 0.787177 \log_{10}(\mathrm{mass}).
-%\end{gather}
-
-Variance was then added around the initial values of $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ by drawing from chi-square distributions with expectation values of $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ respectively. Across all simulations, the home range centers of the prey movement processes were drawn from an isotropic bivariate Poisson distribution.
-
-% Predator movement
-\subsubsection*{Predator movement}
-
-Predator movement were also simulated based on OUF processes. For the predator movement models, all initial parameter values were again simulated based on established allometric relationships with prey mass estimated by Noonan et al. \cite{Noonan:2020}. The spatial variances were simulated as
-
-\begin{gather}\label{eq:predator-allo}
-\log_{10}(\mathrm{95\%~home~range}) = 1.089972 + 1.478050 \log_{10}(\mathrm{mass}) \\
-\sigma_p = \frac{\mathrm{95\%~home~range}}{-2 \log(0.05)  \pi},
-\end{gather}
-
-and the positional autocorrelation timescales as
-
-\begin{gather}\label{eq:predator-allo-taup}
-\log_{10}(\E[\tau_\mathrm{position}]) = 1.612761 + 0.766461 \log_{10}(\mathrm{mass}).
-\end{gather}
-
-For the velocity autocorrelation timescales, we again sampled all values between the 0 and $\tau_\mathrm{position}$
-
-%\begin{gather}
-%\log_{10}(\E[\tau_\mathrm{velocity}]) = -0.1005302 + 0.7403169 \log_{10}(\mathrm{mass}).
-%\end{gather}
-
-Variance was then added around the initial values of $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ by drawing from chi-square distributions with expectation values of $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ respectively. Across all simulations, the home range centers of the predator movement processes were fixed at $0,0$.
-
-% Prey fitness
-\subsubsection*{Prey fitness and inheritance}
-
-Simulated prey moved across a grid of homogeneously distributed foraging patches (Fig. \ref{fig:Prey_Example}). Each patch had a fixed energetic value that was calculated based on prey body size as $E_{\mathrm{patch}} = \frac{10^{0.774 + 0.727\log_{10}(\mathrm{mass})}}{150}$. Although the energetic value of each patch was arbitrarily defined, it acted only as a scaling constant on the number of offspring (details follow) and thus had no influence on any of the results. A sensitivity analysis on patch width revealed a saturating relationship on the ballistic length scale that prey stabilized around. The width of the foraging patches was therefore defined based on prey body mass as $\frac{\sqrt(\sigma_p)}{10}$. This allowed us to minimized the influence of patch size from our simulations. 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=1]{Prey_Movement.png}
-\caption{Example of simulated movement across a grid of homogeneously distributed foraging patches for a $\sim$14 kg prey species. Each patch had an energetic value of 280 kilojoules.}
-\label{fig:Prey_Example}
-\end{figure}
-
-As prey moved across their foraging landscape, every time they entered a new patch they obtained the full energetic value of that patch. We assumed an instantaneous renewal rate such that every time a patch was (re)entered new energy was available for acquisition. From this, we then defined a prey fitness function based on body mass, total number of kilojoules obtained, movement speed, and predator encounters. Field metabolic rate, FMR, in kj/day was calculated based on the allometric relationships derived in \cite{Nagy:1987} as 
-
-\begin{gather}
-\log_{10}(\mathrm{FMR}) = 0.774 + 0.727 \log_{10}(\mathrm{mass}).
-\end{gather}
-
-The metabolic cost of movement, $E$, in watts/kg was calculated based on the relationships derived in from \cite{Taylor:1982} as
-
-\begin{gather}
-E_{\mathrm{movement}} = 10.7 \mathrm{mass}^{-0.316} \mathrm{speed} + 6.03 \mathrm{mass}^{-0.303}.
-\end{gather}
-After converting $E$ in watts/kg to kJ/sec, the total energetic cost of movement during the simulation was calculated as:
-
-\begin{gather}
-E_{\mathrm{total}} = \mathrm{FMR (\frac{kj}{day}) \cdot duration (days)} + E_{\mathrm{movement}} \mathrm{(\frac{kJ}{sec}) \cdot duration (sec)}
-\end{gather}
-
-Because each patch was assumed to have a fixed energetic value, energetic balance at the end of the simulated individual's lifespan was calculated as:
-\begin{gather}
-E_{\mathrm{Balance}} = E_{\mathrm{patch}} \mathrm{(\frac{kj}{patch})} \cdot \mathrm{number~of~patches} - E_{\mathrm{total}}
-\end{gather}
-
-The relationships between energetic costs, patch encounters, and predator movement strategies are shown in Figure \ref{fig:Prey_Diagnostics}.  We then assumed that each day’s worth of excess energy could be converted into a single offspring, such that an individual's total lifetime fitness was calculated as $\frac{E_{\mathrm{Balance}}}{FMR}$. Fitness was rounded down to the nearest whole number and clamped between 0 and $\infty$. All prey that encountered a predator (see below) had a fitness of 0. An individual's offspring then inherited their movement parameters with a small amount of Gaussian distributed noise to emulate intergenerational mutation.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=1]{Prey_Diagnostics.png}
-\caption{Scatterplots depicting the relationships between energetic costs, patch encounters, and prey movement strategies for a 14 kg prey species.}
-\label{fig:Prey_Diagnostics}
-\end{figure}
-
-
-% Predator fitness
-\subsubsection*{Predator fitness and inheritance}
-
-Simulated predators moved across a landscape of randomly distributed prey items (Fig. \ref{fig:Pred_Example}).
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=1]{Sim_Example.png}
-\caption{Example of simulated predator movement moved across a landscape of 10 randomly distributed prey items. The predator movement is shown in yellow, whereas the individual prey movement paths are each shown in blue. The home range centers of the prey movement processes were drawn from an isotropic bivariate Poisson distribution, whereas the home range center of the predator movement process was fixed at $0,0$.}
-\label{fig:Pred_Example}
-\end{figure}
-
-The total energetic cost of metabolism and movement for the predators, $E_{\mathrm{total}}$, was calculated using the same equations as for the simulated prey detailed above. As predators moved across their foraging landscape, every time a prey item entered their perceptual range they were able to capture the prey item and obtain the prey's energetic value. Perceptual range, in m, was defined based on a predator's home range size as $\sqrt(\sigma_p)\cdot 0.05$. Each captured prey item was assumed to have an energetic value of 6.276 kj/g, based on \cite{Gorecki:1965}. Energetic balance at the end of the simulated individual's lifespan was then calculated as:
-\begin{gather}
-E_{\mathrm{Balance}} = 6.276 \mathrm{(\frac{kj}{g})} \cdot \mathrm{mass_{prey} (g) \cdot number~of~prey}  - E_{\mathrm{total}}
-\end{gather}
-
-The relationships between energetic costs, prey encounters, and predator movement strategies are shown in Figure \ref{fig:Pred_Diagnostics}. As with prey fitness, we assumed that each day’s worth of excess energy could be converted into a single offspring, such that an individual's total lifetime fitness was calculated as $\frac{E_{\mathrm{Balance}}}{FMR}$. Fitness was rounded down to the nearest whole number and clamped between 0 and $\infty$. A predator's offspring then inherited their movement parameters with a small amount of Gaussian distributed noise to emulate intergenerational mutation.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=1]{Predator_Diagnostics.png}
-\caption{Scatterplots depicting the relationships between energetic costs, prey encounters, and predator movement strategies for a 40 kg predator species. Note how the general relationships are all consistent with those for the simulated prey shown in figure \ref{fig:Prey_Diagnostics}, but with more stochasticity due to the fact that prey were optimising encounters with stationary foraging patches, whereas predators were optimising encounters with stochastically moving prey.}
-\label{fig:Pred_Diagnostics}
-\end{figure}
-
-
-
-% Simulation setup
-\subsubsection*{Simulations}
-
-Our primary aim with this simulation study was to explore how predator-prey dynamics might be expected to evolve across the body mass spectrum. We therefore explored 20 predator-prey systems of various pairwise body sizes. For these we generated 20 pairs of predator and prey founding populations. Predator body sizes ranged between 5 and 100kg by intervals of 5kg, whereas prey body sizes were determined by predator body size using the allometries derived in \cite{Tucker:2014b} 
-\begin{gather}\label{eq:bodymass-sc}
-\log_{10}(\E[\mathrm{mass_{prey}}]) = -0.87 + 1.26 \log_{10}(\mathrm{mass_{predator}})
-\end{gather}
-The simulated population consisted of 500 prey and 50 predators with movement parameters for OUF models that were calculated as defined above. Individuals moved within movement `landscapes'. Each landscape consisted of 1 predator, 10 randomly distributed prey, and homogeneously distributed prey foraging patches. This landscape setup was held constant across all simulations in order to avoid and density dependent effects. Individuals moved for a fixed duration of 30 prey range crossings (defined by prey $\tau_p$). Predator and prey fitness were calculated using the functions defined above. Individuals passed on their movement parameters to the following generation based on their fitness. As noted in Eq. (\ref{eq:lv}) the main text, the average length scale over which ballistic motion is maintained ($l_v$, in m) is a function of the spatial variance of an animal's movement process ($\sigma_{\mathrm{position}}$, in m$^2$) and its positional and velocity autocorrelation timescales ($\tau_{\mathrm{position}}$ and $\tau_\mathrm{velocity}$ respectively, in sec). In this regard, we simulated the predator and prey spatial variance $\sigma_{\mathrm{position}}$ based on a purely deterministic model, whereas $\E[\tau_\mathrm{position}]$ and $\E[\tau_\mathrm{velocity}]$ were drawn from chi-square distributions. As such, $\tau_\mathrm{position}$ and $\tau_\mathrm{velocity}$ were the only two parameters defining $l_v$ that were free to evolve by natural selection in our simulations.
-
-At the end of the generation, the landscapes were `refreshed' with new movement models sampled from the available pool of offspring and both fitness and inheritance were calculated anew. This process was then repeated for 300 generations. This resulted in a total of 150,000 selection events for the simulated prey, and 15,000 selection events for the predators. In all cases the predator and prey movement converged to a stable value (Fig. \ref{fig:Convergence}). Once the simulations had completed, we calculated $l_v$ values for all predators and prey for the final 50 generations (i.e., 25,000 prey and 2,500 predators). We then estimated the average ratio of predator:prey ballistic length scales. Confidence intervals on the ratio were estimated use the F-distribution via the methods implemented in the \texttt{ctmm R} package.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[scale=0.9]{Convergence_Plots.png}
-\caption{Scatterplots depicting the ballistic length scales of predators and prey over successive generations. Only the first 10 body size pairs we tested are shown, however, the remaining simulations showed similar patterns of convergences.}
-\label{fig:Convergence}
-\end{figure}
-
-
-
-All of the simulations were carried out using the University of British Columbia's High Performance Computing Cluster (HPCC). All simulations were parallelized to improve performance and the computation time per mass-specific predator prey system was 7 days. With 20 systems explored, this resulted in a total computation time of 140 days. The \texttt{R} scripts used to carry out this simulation study are openly available on GitHub at \url{https://github.com/NoonanM/BallisticMotion}.
-
 
 % ----------------------------------------------------------------
 % Empirical analyses
@@ -400,38 +209,112 @@ All of the simulations were carried out using the University of British Columbia
 
 \subsubsection*{Tracking data analysis}
 
-To investigate the potential for ballistic motion to scale allometrically in terrestrial mammals, we compiled GPS tracking data for XXXX species, comprising a total of $XXX$ locations for YYY individuals. Data were obtained from the online animal tracking database Movebank \cite{Wikelski:2017uy}, or contributed by co-authors directly, and are openly available (XXXXXXXX). Notably, this dataset includes species with body masses covering 4 orders of magnitude (0.5 -- 4000 kg), providing the broad coverage of the mass spectrum required to investigate allometric trends. Individual datasets were selected based on the criterion of range resident behavior, as evidenced by plots of the semi-variance in positions as a function of the time lag separating observations (i.e., variograms) with a clear asymptote at large lags \cite{Fleming:2014jr, Calabrese:2016ey}. All data from migratory, or dispersing individuals were excluded as their measured movement strategies would not be representative of the normal foraging dynamics we aimed to quantify. The visual verification of range-residency via variogram analysis \cite{Fleming:2014jr} was conducted using the \texttt{R} package \texttt{ctmm} \cite{Calabrese:2016ey}.
+To investigate pattern in the ballistic length scales, we compiled GPS tracking data on terrestrial mammals from the online animal tracking database Movebank \cite{Wikelski:2017uy}, or from co-authors directly. Individual datasets were selected based on the criterion of range resident behavior, as evidenced by plots of the semi-variance in positions as a function of the time lag separating observations (i.e., variograms) with a clear asymptote at large lags \cite{Fleming:2014jr, Calabrese:2016ey}. All data from migratory, or dispersing periods were excluded as their measured movement strategies would not be representative of the normal foraging dynamics we aimed to describe. The visual verification of range-residency via variogram analysis \cite{Fleming:2014jr} was conducted using the \texttt{R} package \texttt{ctmm} \cite{Calabrese:2016ey}.
 
-As noted in Eq. (\ref{eq:lv}), the average length scale over which ballistic motion is maintained ($l_v$, in m) is a function of the spatial variance of an animal's movement process ($\sigma_{\mathrm{position}}$, in m$^2$) and its positional and velocity autocorrelation timescales ($\tau_{\mathrm{position}}$ and $\tau_\mathrm{velocity}$ respectively, in sec). Estimating $l_v$ for these data thus first required estimating the autocorrelation structure in each of the individual tracking datasets. To do this, we fit a series of range-resident, continuous-time movement models to the data. The fitted models included the Independent and Identically Distributed IID process, which features uncorrelated positions and velocities; the Ornstein-Uhlenbeck (OU) process, which features correlated positions but uncorrelated velocities \cite{Uhlenbeck:1930fw}; and an OU-Foraging (OUF) process, featuring both correlated positions, and velocities \cite{Fleming:2014jr, Fleming:2014gd}. Model selection was then be employed to identify the best model for the data \cite{Fleming:2014gd, Fleming:2015fo}, from which the positional autocorrelation timescale parameter, $\tau_p$, was extracted. Notably, estimating the autocorrelation structure of the tracking data in this way also provided an estimate of $\hat{N}_\mathrm{area}$. To fit and select the movement models, we used the \texttt{R} package \texttt{ctmm}, applying the workflow described by \cite{Calabrese:2016ey}. Because only the OUF processes included information on all of the parameters required to estimate $l_v$, we further restricted out analyses to only those individuals for which the OUF model was selected. NEED TO INCLUDE STATS ON WHETHER THERE WERE ANY SPECIES/STUDY/GEOGRAPHIC BIASES IN THIS SUBSETTING.
+As noted in Eq. (\ref{eq:lv}), the average length scale over which ballistic motion is maintained ($l_v$, in m) is a function of the spatial variance of an animal's movement process ($\sigma_{\mathrm{position}}$, in m$^2$) and its positional and velocity autocorrelation timescales ($\tau_{\mathrm{position}}$ and $\tau_\mathrm{velocity}$ respectively, in sec). Estimating $l_v$ for these data thus first required estimating the autocorrelation structure in each of the individual tracking datasets. To do this, we fit a series of range-resident, continuous-time movement models to the data. The fitted models included the Independent and Identically Distributed IID process, which features uncorrelated positions and velocities; the Ornstein-Uhlenbeck (OU) process, which features correlated positions but uncorrelated velocities \cite{Uhlenbeck:1930fw}; and an OU-Foraging (OUF) process, featuring both correlated positions, and correlated velocities \cite{Fleming:2014jr, Fleming:2014gd}. We then employed AICc based model selection to identify the best model for the data \cite{Fleming:2014gd, Fleming:2015fo}, from which the positional autocorrelation timescale parameter, $\tau_p$, was extracted. To fit and select the movement models, we used the \texttt{R} package \texttt{ctmm}, applying the workflow described by \cite{Calabrese:2016ey}. Because only the OUF processes included information on all of the parameters required to estimate $l_v$, we further restricted out analyses to only those individuals for which the OUF model was selected. The final dataset included data from 53 species, comprising a total of 5,963,903 locations for 963 individuals. Finally, $l_v$ was calculated from the parameter estimates for each of these individuals using Eq. (\ref{eq:lv}).
 
 \subsubsection*{Covariate data}
 
-For each of the species in our dataset we compiled covariate data on that species' mean adult mass, in kilograms, take from previously published sources. For the Carnivora, mass data were taken from \cite{Noonan:2015kg}, while data for species from other orders were taken from \cite{Myers:2019}. To investigate the potential influence of diet on movement strategies, we identified the main food source for each of the species in our dataset, defined as constituting at least 60\% of the diet \cite{Gittleman:1985il, Noonan:2015kg}, and classified the species as carnivorous/omnivorous, or herbivorous, and analysed data from these two dietary classes separately. Dietary data for the Carnivora were taken from \cite{Noonan:2015kg}, while dietary data for species from other orders were taken from \cite{Myers:2019}.
+For each of the species in our dataset we compiled covariate data on that species' mean adult mass, in kilograms, and diet taken from the EltonTraits database \cite{Wilman:2014}. This dataset includes species with body masses covering 4 orders of magnitude (0.4 -- 4000 kg). Dietary class was then used to categorise species as being either a predator, or prey species. Predators were species that specialised primarily on mobile animal prey, whereas prey were herbivores and frugivores that specialised primarily on sessile vegetation. To assess ecological factors that may have influenced $l_v$, we also annotated each estimate with three satellite-derived metrics: i) mean Normalized Difference Vegetation Index (NDVI), a measure of resource abundance \cite{Pettorelli:2011}; ii) percent forest cover \cite{Tuanmu:2014}, a measure of habitat permeability. A summary of the dataset is shown in table~\ref{tab:data_summary} %; and iii) terrain roughness \cite{Amatulli:2018}. The fu
 
-\subsubsection*{Assessing allometries in $l_v$}
+\begin{table}[!h]
+\begin{center}
+\tiny
+\caption{\textbf{Data summary}. Summary statistics on the empirical tracking data used in the analyses in the main text. Body mass is in kilograms and ballistic length scales, $l_v$, are in meters.\\}
+\label{tab:data_summary}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Binomial}                 & \textbf{n} & \textbf{Mass} & \textbf{Trophic Group} & \textbf{$l_v$} \\ \hline
+Acinonyx jubatus                  & 3          & 46.7          & Predator      & 357.6          \\
+Aepyceros melampus                & 20         & 52.50         & Prey          & 31.1           \\
+Alces alces                       & 33         & 541.46        & Prey          & 97.6           \\
+Antidorcas marsupialis            & 10         & 31.5          & Prey          & 362.7          \\
+Antilocapra americana             & 3          & 46.08         & Prey          & 296.7          \\
+Beatragus hunteri                 & 4          & 79.13         & Prey          & 104.8          \\
+Brachylagus idahoensis            & 3          & 0.42          & Prey          & 9.7            \\
+Canis latrans                     & 49         & 13.41         & Predator      & 125.8          \\
+Canis lupus                       & 74         & 32.18         & Predator      & 722.8          \\
+Capra ibex                        & 39         & 85.17         & Prey          & 75.6           \\
+Cerdocyon thous                   & 19         & 5.24          & Predator      & 23.7           \\
+Cervus canadensis                 & 14         & 200           & Prey          & 156.3          \\
+Chlorocebus pygerythrus           & 10         & 4.993         & Prey          & 9.4            \\
+Connochaetes taurinus             & 35         & 180.00        & Prey          & 156.0          \\
+Cuon alpinus                      & 5          & 14.17         & Predator      & 438.9          \\
+Elephas maximus indicus           & 24         & 3500          & Prey          & 180.7          \\
+Elephas maximus maximus           & 51         & 3750          & Prey          & 253.2          \\
+Elephas maximus sumatranus        & 9          & 3000          & Prey          & 187.3          \\
+Equus hemionus hemionus           & 18         & 240           & Prey          & 310.3          \\
+Equus quagga                      & 9          & 400           & Prey          & 546.3          \\
+Eulemur rufifrons                 & 3          & 2.25          & Prey          & 25.2           \\
+Euphractus sexcinctus             & 4          & 4.78          & Prey          & 11.7           \\
+Felis catus                       & 53         & 2.9           & Predator      & 116.9          \\
+Felis silvestris                  & 3          & 5.10          & Predator      & 174.6          \\
+Giraffa camelopardalis reticulata & 10         & 900.0         & Prey          & 284.5          \\
+Hyaena brunnea                    & 3          & 42.98         & Predator      & 502.1          \\
+Lagostrophus fasciatus            & 1          & 1.7           & Prey          & 21.2           \\
+Leopardus pardalis                & 3          & 11.90         & Predator      & 74.6           \\
+Loxodonta africana                & 22         & 3940.03       & Prey          & 402.9          \\
+Lycalopex culpaeus                & 8          & 8.62          & Predator      & 95.2           \\
+Lynx rufus                        & 13         & 8.9           & Predator      & 70.0           \\
+Madoqua guentheri                 & 15         & 7.50          & Prey          & 5.6            \\
+Martes pennanti                   & 17         & 4             & Predator      & 54.0           \\
+Neogale vison                     & 5          & 1.15          & Predator      & 55.5           \\
+Odocoileus hemionus               & 5          & 54.21         & Prey          & 72.4           \\
+Odocoileus virginianus            & 13         & 55.51         & Prey          & 56.5           \\
+Oreamnos americanus               & 4          & 72.50         & Prey          & 293.5          \\
+Oryx dammah                       & 38         & 177.5         & Prey          & 243.2          \\
+Ovis canadensis                   & 3          & 74.64         & Prey          & 114.8          \\
+Ovis dalli                        & 66         & 55.65         & Prey          & 197.6          \\
+Panthera leo                      & 3          & 161.50        & Predator      & 907.3          \\
+Panthera onca                     & 105        & 75.7          & Predator      & 350.7          \\
+Panthera pardus pardus            & 7          & 48.75         & Predator      & 482.2          \\
+Panthera pardus saxicolor         & 6          & 52.04         & Predator      & 218.9          \\
+Propithecus verreauxi             & 5          & 3.48          & Prey          & 20.1           \\
+Puma concolor                     & 2          & 51.60         & Predator      & 233.1          \\
+Rangifer tarandus                 & 19         & 86.03         & Prey          & 215.9          \\
+Rangifer tarandus tarandus        & 8          & 86.03         & Prey          & 384.1          \\
+Sus scrofa                        & 23         & 96.12         & Prey          & 46.9           \\
+Syncerus caffer                   & 6          & 580.00        & Prey          & 235.1          \\
+Ursus americanus                  & 20         & 99.95         & Prey          & 130.9          \\
+Vulpes lagopus                    & 18         & 3.58          & Predator      & 105.0          \\
+Vulpes vulpes                     & 20         & 5.48          & Predator      & 219.9          \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
-The resulting dataset of ballistic length scales was then analysed to test for any allometric relationship in $l_v$ for both carnivorous/omnivorous, or herbivorous dietary guilds. Allometries in $l_v$ were modelled for each dietary guild separately on a $\log_{10}$-$\log_{10}$ scale using generalised least-squares fitting with Gaussian distributed errors. Due to phylogenetic inertia \cite{Hansen:2005cg}, closely related species may exhibit similarities in movement due to common descent, requiring controlled comparisons \cite{Harvey:1991uo}. We applied phylogenetic variogram analysis \cite{Noonan:2022} to asses the strength of any potential phylogenetic autocorrelation in ballistic length scales between species. Phylogenetic relationships were obtained from the VertLife repository \cite{Upham:2019}. We sampled 1,000 trees and estimated the consensus tree using the \texttt{R} package \texttt{ape} \cite{ape}. The resulting tree is shown in the inset in figure \ref{fig:SVF}. Variogram analysis revealed evidence only weak phylogenetic autocorrelation (Fig.~\ref{fig:SVF}), with an OU model being selected as the best fit model describing the evolution of $l_v$.
+\subsubsection*{Assessing trends in $l_v$}
 
-%\begin{figure}[!h]
-%\centering
-%\includegraphics[scale=1]{Phylogeny.png}
-%\caption{Phylogenetic relationships of the Mammalian species analysed in the main text.}
-%\label{fig:phylogeny}
-%\end{figure}
+The resulting dataset of ballistic length scales was then analysed to test for differences in $l_v$ between predators and prey, and for an effect of NDVI and forest cover on $l_v$. Because $l_v$ was correlated with body size (Fig.~\ref{fig:emp_res}A), we controlled for mass by regressing $l_v$ against body size on a $\log_{10}$-$\log_{10}$ scale using generalised least-squares fitting with Gaussian distributed errors. Due to phylogenetic inertia \cite{Hansen:2005cg}, closely related species may exhibit similarities in movement due to common descent, requiring controlled comparisons \cite{Harvey:1991uo}. Accordingly, we did not treat species data records as independent, but rather corrected for this inertia by adjusting the variance-covariance matrix in our regression model based on the phylogenetic relationships using the \texttt{R} package \texttt{nlme} \cite{Pinheiro:2018}. Phylogenetic relationships between all of the 53 species in our dataset were obtained from the VertLife repository \cite{Upham:2019}. We sampled 1,000 trees and estimated the consensus tree using the \texttt{R} package \texttt{phytools}, version 1.0-3 \cite{Revell:2012}. The resulting tree is shown in figure \ref{fig:phylogeny}. % with an OU model being selected as the best fit model describing the evolution of $l_v$. We applied phylogenetic variogram analysis \cite{Noonan:2022} to asses the strength of any potential phylogenetic autocorrelation in ballistic length scales between species.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[scale=1]{Ballistic_Motion_SVF.png}
-\caption{Empirical semi-variogram on Mammalian ballistic length scale. The black lines depict the estimated semi-variance at different time lags, wheres the grey shading show the 95\% confidence intervals. The red line and shading depict the estimated semi-variance under an Independent and Identically Distributed IID process. The inset shows the phylogenetic relationships of the Mammalian species analysed in the main text, coloured by dietary guild.}
-\label{fig:SVF}
+\includegraphics[scale=1]{Phylogeny.png}
+\caption{Phylogenetic relationships of the Mammalian species analysed in the main text with species labels coloured by trophic guild (prey in blue, predators in yellow).}
+\label{fig:phylogeny}
 \end{figure}
 
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[scale=1]{Ballistic_Motion_SVF.png}
+%\caption{Empirical semi-variogram on Mammalian ballistic length scale. The black lines depict the estimated semi-variance at different time lags, wheres the grey shading show the 95\% confidence intervals. The red line and shading depict the estimated semi-variance under an Independent and Identically Distributed IID process. The inset shows the phylogenetic relationships of the Mammalian species analysed in the main text, coloured by trophic group.}
+%\label{fig:SVF}
+%\end{figure}
 
-Accordingly, we did not treat species data records as independent, but rather corrected for this inertia by including the phylogenetic relationships among species as a random effect in our allometric regressions. The phylogenetic relationships among species were included as a random effect in our allometric regressions using the \texttt{R} package \texttt{nlme} \cite{Pinheiro:2018}.
+
+The final step in our analyses was to determine whether individual deviations from the allometric relationships in $l_v$ could be described by ecosystem productivity or permeability. We regressed the residuals of the phylogenetically controlled allometric models described above against NDVI and percent forest cover. Models were fitted for predators and prey separately. The relative support for these two models was then assessed by comparing the AICc value of the fitted models against intercept only models.
+
+% the stabilising selection around a mass invariant ration between predator and prey $l_v$ we found in our simulation study could also be observed in the empirical movement data. This required estimating the ratio of predator:prey $l_v$ for each species in our dataset. For this, we used the fitted allometric models described above to predict $l_v$ for the median body mass of each species' predators and prey. We then fit two models to these data, one that included a correlation with body mass, and an intercept only model. The relative support for these two models was then assessed using likelihood ratio tests.
 
 
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=1]{Empirical_Figure_Trees.png}
+\caption{Residuals of the allometric scaling of the ballistic length scale, $l_v$  for prey (blue), as well as predatory (yellow) mammals as a function of the percent tree cover. Each point is an individual ($n=963$) representing 53 species.}
+\label{fig:Trees}
+\end{figure}
 
-The final step in our analyses was to determine whether the stabilising selection around a mass invariant ration between predator and prey $l_v$ we found in our simulation study could also be observed in the empirical movement data. This required estimating the ratio of predator:prey $l_v$ for each species in our dataset. For this, we used the fitted allometric models described above to predict $l_v$ for the median body mass of each species' predators and prey. We then fit two models to these data, one that included a correlation with body mass, and an intercept only model. The relative support for these two models was then assessed using likelihood ratio tests.
+The \texttt{R} scripts used to produce the results presented in this work are openly available on GitHub at \url{https://github.com/NoonanM/BallisticMotion}.
+
 
 %(SUPPLEMENTARY TABLE WITH MOD SELECTION RESULTS)
 

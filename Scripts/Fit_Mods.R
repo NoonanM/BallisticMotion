@@ -186,16 +186,17 @@ CTMM_FIT <- function(cilla,
   res$tau_p <- if(nrow(summary(FIT, units = FALSE)$CI) >= 2){summary(FIT, units = FALSE)$CI[2,2]} else {NA}
   res$tau_p_min <- if(nrow(summary(FIT, units = FALSE)$CI) >= 2){summary(FIT, units = FALSE)$CI[2,1]} else {NA}
   res$tau_p_max <- if(nrow(summary(FIT, units = FALSE)$CI) >= 2){summary(FIT, units = FALSE)$CI[2,3]} else {NA}
-  res$tau_p_var <- if(nrow(summary(FIT, units = FALSE)$CI) >= 2){FIT$COV["tau position","tau position"]} else {NA}
+  if(grepl("OUf", summary(FIT)$name, fixed = TRUE)){res$tau_p_var <- FIT$COV["tau","tau"]} else if(nrow(summary(FIT, units = FALSE)$CI) >= 2){
+    res$tau_p_var <- FIT$COV["tau position","tau position"]} else {NA}
   
   
-  grepl("OUF", summary(FIT)$name, fixed = TRUE)
   
   #Get tau_v
   res$tau_v <- if(grepl("OUF", summary(FIT)$name, fixed = TRUE)){summary(FIT, units = FALSE)$CI[3,2]} else {NA}
   res$tau_v_min <- if(grepl("OUF", summary(FIT)$name, fixed = TRUE)){summary(FIT, units = FALSE)$CI[3,1]} else {NA}
   res$tau_v_max <- if(grepl("OUF", summary(FIT)$name, fixed = TRUE)){summary(FIT, units = FALSE)$CI[3,3]} else {NA}
   res$tau_v_var <- if(grepl("OUF", summary(FIT)$name, fixed = TRUE)){FIT$COV["tau velocity","tau velocity"]} else {NA}
+  
   
   #Get spatial variance (sigma)
   res$sigma <- ctmm:::area.covm(FIT$sigma)

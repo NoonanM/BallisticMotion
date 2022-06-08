@@ -6,7 +6,7 @@
 #PBS -N 40000g_Pred
 #PBS -A st-mnoonan-1
 #PBS -m abe
-#PBS -M micael.noonan@ubc.ca
+#PBS -M michael.noonan@ubc.ca
 #PBS -o output.txt
 #PBS -e error.txt
 

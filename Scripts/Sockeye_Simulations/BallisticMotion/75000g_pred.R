@@ -41,14 +41,14 @@ t <- sampling(mass_prey, crossings = 30)
 CALS <- ((10^(0.774 + 0.727*log10(mass_prey)))^1.22)/150
 
 #Number of preds & prey in each "arena"
-n_prey <- 10
+n_prey <- floor(1/mass_pred^(-0.25))
 n_pred <- 1
 
 #Number of "arenas"
 REPS <- 500
 
 #Number of generations
-GENS <- 2000
+GENS <- 300
 
 # Build the raster of food patches for prey to feed on
 FOOD <- patches(mass_pred,
@@ -314,12 +314,12 @@ for(G in 1:GENS){
   
   
   #Save prey results
-  save(prey_res, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Prey.Rda')
-  save(prey_details, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Prey_details.Rda')
+  save(prey_res, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Prey_decline.Rda')
+  save(prey_details, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Prey_details_decline.Rda')
   
   #Save predator results
-  save(pred_res, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Pred.Rda')
-  save(pred_details, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Pred_details.Rda')
+  save(pred_res, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Pred_decline.Rda')
+  save(pred_details, file = '/scratch/st-mnoonan-1/BallisticMotion/Results/lv_Evo_75000g_Pred_details_decline.Rda')
   
   # Progress report
   print(G)

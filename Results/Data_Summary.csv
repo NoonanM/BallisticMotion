@@ -1,0 +1,54 @@
+Binomial,n,Mass,Diet,$l_v$
+Acinonyx jubatus,3,46.7, Predator,357.6
+Aepyceros melampus,20,52.50,Prey,31.1
+Alces alces,33,541.46,Prey,97.6
+Antidorcas marsupialis,10,31.5,Prey,362.7
+Antilocapra americana,3,46.08,Prey,296.7
+Beatragus hunteri,4,79.13,Prey,104.8
+Brachylagus idahoensis,3,0.42,Prey,9.7
+Canis latrans,49,13.41, Predator,125.8
+Canis lupus,74,32.18, Predator,722.8
+Capra ibex,39,85.17,Prey,75.6
+Cerdocyon thous,19,5.24, Predator,23.7
+Cervus canadensis,14,200,Prey,156.3
+Chlorocebus pygerythrus,10,4.993,Prey,9.4
+Connochaetes taurinus,35,180.00,Prey,156.0
+Cuon alpinus,5,14.17, Predator,438.9
+Elephas maximus indicus,24,3500,Prey,180.7
+Elephas maximus maximus,51,3750,Prey,253.2
+Elephas maximus sumatranus,9,3000,Prey,187.3
+Equus hemionus hemionus,18,240,Prey,310.3
+Equus quagga,9,400,Prey,546.3
+Eulemur rufifrons,3,2.25,Prey,25.2
+Euphractus sexcinctus,4,4.78,Prey,11.7
+Felis catus,53,2.9, Predator,116.9
+Felis silvestris,3,5.10, Predator,174.6
+Giraffa camelopardalis reticulata,10,900.0,Prey,284.5
+Hyaena brunnea,3,42.98, Predator,502.1
+Lagostrophus fasciatus,1,1.7,Prey,21.2
+Leopardus pardalis,3,11.90, Predator,74.6
+Loxodonta africana,22,3940.03,Prey,402.9
+Lycalopex culpaeus,8,8.62, Predator,95.2
+Lynx rufus,13,8.9, Predator,70.0
+Madoqua guentheri,15,7.50,Prey,5.6
+Martes pennanti,17,4, Predator,54.0
+Neogale vison,5,1.15, Predator,55.5
+Odocoileus hemionus,5,54.21,Prey,72.4
+Odocoileus virginianus,13,55.51,Prey,56.5
+Oreamnos americanus,4,72.50,Prey,293.5
+Oryx dammah,38,177.5,Prey,243.2
+Ovis canadensis,3,74.64,Prey,114.8
+Ovis dalli,66,55.65,Prey,197.6
+Panthera leo,3,161.50, Predator,907.3
+Panthera onca,105,75.7, Predator,350.7
+Panthera pardus pardus,7,48.75, Predator,482.2
+Panthera pardus saxicolor,6,52.04, Predator,218.9
+Propithecus verreauxi,5,3.48,Prey,20.1
+Puma concolor,2,51.60, Predator,233.1
+Rangifer tarandus,19,86.03,Prey,215.9
+Rangifer tarandus tarandus,8,86.03,Prey,384.1
+Sus scrofa,23,96.12,Prey,46.9
+Syncerus caffer,6,580.00,Prey,235.1
+Ursus americanus,20,99.95,Prey,130.9
+Vulpes lagopus,18,3.58, Predator,105.0
+Vulpes vulpes,20,5.48, Predator,219.9
